@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="./css/screen.css">                     
         <link rel="stylesheet" href="./css/phone.css" media="only screen and (max-device-width: 480px)">
         <link rel="stylesheet" href="./css/tablet.css" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px)">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link href="//fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow:400,700" rel="stylesheet" type="text/css">
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,14 +21,14 @@
     <body>
         <div id="controlWrap">
             <div class="header">
-                <span class="brand">The <b>Maker</b> Map</span>
-                <div class="menuToggle"><i class="icon-reorder"></i></div>
+                <span class="brand"><i id="mainBusy" class="fa fa-refresh fa-spin"></i>&nbsp;The <b>Maker</b> Map</span>
+                <div class="menuToggle"><i class="fa fa-reorder"></i></div>
             </div><!-- .header -->
 
             <div class="menu">
-                <a class="action addResource" role="button" title="Search Maker Maps" target="_blank" id='search-nav'><i class="icon-search"></i><br/> Search Maker Map</a>
-                <a class="action addResource" role="button" title="Add a Resource" target="_blank" id="add-content-nav"><i class="icon-plus"></i><br/> Add a Resource</a>
-                <a class="action aboutMap" href="#aboutModal" role="button" title="About the Map" id="about-nav"><i class="icon-map-marker"></i><br/>About the Map</a>
+                <a class="action addResource" role="button" title="Search Maker Maps" target="_blank" id='search-nav'><i class="fa fa-2x fa-search"></i><br/> Search Maker Map</a>
+                <a class="action addResource" role="button" title="Add a Resource" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/> Add a Resource</a>
+                <a class="action aboutMap" href="#aboutModal" role="button" title="About the Map" id="about-nav"><i class="fa fa-2x fa-info-circle"></i><br/>About the Map</a>
             </div><!-- .menu -->
 
             <div class="searchMenu">
@@ -35,11 +36,11 @@
                     <div class="about">
                         <div class="searchAction">
                             Search...
-                            <div class="searchIcon"><i class="icon-search"></i></div>
+                            <div class="searchIcon"><i class="fa fa-search"></i></div>
                         </div>
                         <div class="mapActions">
-                            <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource"  target="_blank"><i class="icon-plus"></i><br/>Add a Resource</a>
-                            <a href="https://github.com/RHoKAustralia/melb-maker-map" class="action mapSource" title="View the Map Source" target="_blank"><i class="icon-github-alt"></i><br/>The Map Source</a>
+                            <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource"  target="_blank"><i class="fa fa-2x fa-plus"></i><br/>Add a Resource</a>
+                            <a href="https://github.com/RHoKAustralia/melb-maker-map" class="action mapSource" title="View the Map Source" target="_blank"><i class="fa fa-2x fa-github-alt"></i><br/>The Map Source</a>
                         </div>
                     </div><!-- .about -->
                 </div><!-- .aboutWrap -->
@@ -48,12 +49,13 @@
                     <form id="search">
                         <input id="searchForm" type="text" placeholder="Search..." />
                     </form>
+                    <!-- FIXME: Not using FontAwesome icon versions because they won't show -->
                     <div class="searchIcon"><i class="icon-search"></i></div>
                     <div class="filterIcon"><i class="icon-tags"></i></div>
                 </div><!-- .searchWrap -->
 
                 <div class="filterWrap">
-                    <div class="filterHeader">Filter By Primary Classification <i class="icon-caret-up"></i></div>
+                    <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter By Primary Classification</div>
                     <form id="filter">
                         <ul class="filters">
                             <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any"></label></li>
@@ -100,7 +102,7 @@
             </div>
         </div><!-- #controlWrap -->
 
-        <div class="locateMe" rel="tooltip" data-placement="left" data-original-title="click to re-center the map"><i class="icon-map-marker"></i></div>
+        <div class="locateMe" rel="tooltip" data-placement="left" data-original-title="click to re-center the map"><i class="fa fa-map-marker"></i></div>
         
         <!-- Map -->
         <div id="map-wrapper">

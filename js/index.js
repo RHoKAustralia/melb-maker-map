@@ -293,6 +293,9 @@
      * Reload the markers on the map based on the current search and filtering criteria
      */
     function loadData() {
+        var busyEl = $("#mainBusy"); 
+        busyEl.show();
+        
         var query_array = [];
         var query = new Parse.Query(MakerMap.Model.Maker);
 
@@ -336,9 +339,11 @@
                 }
                 makersLayer.setMap(map);
                 setupEventListeners();
+                busyEl.hide();
             },
             failure: function(err) {
                 alert("Error loading markers: " + err);
+                busyEl.hide();
             }
         });
     }
