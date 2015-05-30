@@ -357,6 +357,9 @@
             var anchor = new google.maps.MVCObject();
             anchor.set("position",event.latLng);
             infoWindow.open(map,anchor);
+            // var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            map.setCenter(event.latLng);
+            map.setZoom(12);
         });
     };
 
