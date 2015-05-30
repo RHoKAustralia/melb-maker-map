@@ -1,0 +1,14 @@
+{
+  "name": "themakermap.com",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "less": "~2.5.0"
+    },
+  "scripts": {
+    "install": "bash ./build.sh"
+  },
+  "engines": {
+    "node": "*"
+  }
+}

@@ -1,3 +1,9 @@
 /* MacOS */
 .DS_Store
 .idea
+
+i# ignoring temporary files
+*~
+*swp
+
+/node_modules
