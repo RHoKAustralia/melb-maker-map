@@ -6,6 +6,16 @@
 - Install [Node.js](http://nodejs.org/)
 
 ### To Build
-```bash
+```
 npm install
 ```
+
+### To Run The Server
+
+```
+npm run-script server
+```
+
+On the browser: http://localhost:8080/
+
+Note: this is assuming node_modules is under the project root. 
