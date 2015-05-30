@@ -301,8 +301,12 @@
         if (!symbolName || symbolName == "") {
             return null;
         }
+        var relPart = "img/markers/" + symbolName + ".png";
         //HACK: Should be a better way to get the URL base of index.html
-        return window.location.pathname.replace("index.html", "img/markers/" + symbolName + ".png");
+        if (window.location.pathname.indexOf("index.html") >= 0)
+            return window.location.pathname.replace("index.html", relPart);
+        else
+            return relPart;
     }
 
     function loadData() {
