@@ -163,6 +163,7 @@
             query:  generateQuery(),
             map:    map
         });
+        loadData();
 
         if (navigator && navigator.geolocation) {
            locateMe();
@@ -260,9 +261,38 @@
 			
 		}
 
-
     function initSocialite() {
         Socialite.load($('div.footer'));
+    }
+
+    function makerToFeature(mkr) {
+        var coords = mkr.get("coordinates").toJSON();
+        var obj = {
+            id: mkr.id,
+            geometry: {
+                lng: coords.longitude,
+                lat: coords.latitude
+            },
+            properties: {
+                title: mkr.get("title"),
+                description: mkr.get("description")
+            }
+        };
+        return new google.maps.Data.Feature(obj);
+    }
+
+    function loadData() {
+        var query = new Parse.Query(MakerMap.Model.Maker);
+        query.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    map.data.add(makerToFeature(resp[i]));
+                }
+            },
+            failure: function(err) {
+                
+            }
+        })
     }
 
     //Init the parse API
