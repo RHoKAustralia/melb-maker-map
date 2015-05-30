@@ -56,64 +56,6 @@
     }
 
     /**
-     * Generates a search query.
-     *
-     * @param {String} Search term
-     *
-     * @return {String}
-     */
-    function generateSearchQuery (term) {
-        var q = term.replace(/^\s+|\s+$/g, "").replace(/'/g, '\\\'').toLowerCase();
-            qp = "'Resource Name' CONTAINS IGNORING CASE '",
-            qs = "'";
-
-        if (q === '') return '';
-        return qp + q + qs;
-    }
-
-    /**
-     * Generates a filter query.
-     *
-     * @return {String}
-     */
-    function generateFilterQuery () {
-        var q  = "",
-            qp = "'Business Type' IN (",
-            qs = ")",
-            $filter = $('#filter');
-
-        if ($filter.find('input[value="any"]:checked').length > 0) {
-            return '';
-        }
-
-        $filter.find('input[type="checkbox"]:checked').each(function () {
-            q += "'" + $(this).attr('value') + "', ";
-        });
-
-        q = q.slice(0, q.length - 2);
-        if (q === '') return '';
-
-        return qp + q + qs;
-    }
-
-    /**
-     * Generates query object for the Google Fusion Tables API.
-     *
-     * @return {Object}
-     */
-    function generateQuery () {
-        var search  = generateSearchQuery($('#search').find('input').val()),
-            filter  = generateFilterQuery(),
-            and     = (search !== '' && filter !== '') ? ' AND ' : '';
-
-        return {
-            select: 'Location',
-            from:   dataProvider,
-            where:  search + and + filter
-        };
-    }
-
-    /**
      * Google Maps
      */
     function initMaps () {
@@ -311,6 +253,7 @@
 
     function loadData() {
         var query_array = [];
+        var query = new Parse.Query(MakerMap.Model.Maker);
 
         // Detach the layer before replacing
         if (makersLayer) {
@@ -325,7 +268,15 @@
                 icon: getIcon(feature.getProperty("marker_symbol"))
             };
         });
-        var query = new Parse.Query(MakerMap.Model.Maker);
+
+        search_string = $('#search').find('input').val();
+        if(search_string != "") {
+            var title_query = new Parse.Query(MakerMap.Model.Maker);
+            var description_query = new Parse.Query(MakerMap.Model.Maker);
+            title_query.contains("title", search_string);
+            description_query.contains("description", search_string);
+            query = Parse.Query.or(title_query, description_query);
+        }
 
         if($('#filter').find('input[value="any"]:checked').length == 0) {
             $('#filter').find('input[type="checkbox"]:checked').each(function () {
