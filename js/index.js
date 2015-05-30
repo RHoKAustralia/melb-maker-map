@@ -285,7 +285,7 @@
         if (!symbolName || symbolName == "") {
             return null;
         }
-        return "/images/" + symbolName + ".png";
+        return "/img/markers/" + symbolName + ".png";
     }
 
     function loadData() {
@@ -293,7 +293,7 @@
         if (makersLayer) {
             makersLayer.setMap(null);
         }
-        makersLayer = new google.maps.Data()
+        makersLayer = new google.maps.Data();
         makersLayer.setStyle(function(feature) {
             return {
                 fillColor: feature.getProperty("marker_color"),
@@ -303,6 +303,7 @@
             };
         });
         var query = new Parse.Query(MakerMap.Model.Maker);
+        
         query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
@@ -313,7 +314,7 @@
             failure: function(err) {
                 alert("Error loading markers: " + err);
             }
-        })
+        });
     }
 
     //Init the parse API
