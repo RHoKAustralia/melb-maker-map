@@ -229,16 +229,6 @@
 			});
 		}
 		
-		function aboutModal() {
-			var aboutContent = $('.aboutWrap').html();
-			$('#aboutModal .modal-body').html(aboutContent);
-			
-			$('.about .searchAction').click(function(){
-				$('#aboutModal').modal('hide');
-				$('#searchForm').focus();
-			});
-			
-    		}
 
     function initSocialite() {
         Socialite.load($('div.footer'));
@@ -347,7 +337,7 @@
     initEventListeners();
 		filterMenu();
 		mobileMenu();
-		aboutModal();
+	$('.aboutMenu').hide();
     initSocialite();
 
 })(jQuery);
