@@ -288,7 +288,8 @@
         if (!symbolName || symbolName == "") {
             return null;
         }
-        return "/img/markers/" + symbolName + ".png";
+        //HACK: Should be a better way to get the URL base of index.html
+        return window.location.pathname.replace("index.html", "img/markers/" + symbolName + ".png");
     }
 
     function loadData() {
