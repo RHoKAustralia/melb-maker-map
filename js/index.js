@@ -35,8 +35,8 @@
      */
     function updateAnyCheckbox (e) {
         var $target = $(e.target);
-        var $boxen  = $('#filter').find('input[type="checkbox"]').not('[value="any"]');
-        var $any    = $('#filter').find('input[value="any"]');
+        var $boxen  = $('#filter').find('input.classification-filter[type="checkbox"]').not('[value="any"]');
+        var $any    = $('#filter').find('input.classification-filter[value="any"]');
 
         if ($target.val() == 'any') {
             // Update other checkboxes based on "any" state
@@ -186,6 +186,26 @@
             $('.addContentMenu').hide();
             console.log('search');
         });
+        
+        // Load classifications
+        var classQry = new Parse.Query(MakerMap.Model.PrimaryClassification);
+        classQry.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    var cls = resp[i];
+                    $("ul.filters").append("<li><label>" + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
+                }
+                
+                // Filter
+                $filter.find('input.classification-filter').click(function (e) {
+                    updateAnyCheckbox(e);
+                    loadData();
+                });
+            },
+            failure: function(err) {
+                alert("An error occurred loading primary classifications: " + err);
+            }
+        });
 
         // Search
         $search.submit(function () {
@@ -193,12 +213,6 @@
         });
 
         $search.find('input').keyup(function () {
-            loadData();
-        });
-
-        // Filter
-        $filter.find('input').click(function (e) {
-            updateAnyCheckbox(e);
             loadData();
         });
     }
@@ -288,12 +302,13 @@
             query = Parse.Query.or(title_query, description_query);
         }
 
-        if($('#filter').find('input[value="any"]:checked').length == 0) {
-            $('#filter').find('input[type="checkbox"]:checked').each(function () {
+        if($('#filter').find('input.classification-filter[value="any"]:checked').length == 0) {
+            $('#filter').find('input.classification-filter[type="checkbox"]:checked').each(function () {
                 query_array.push($(this).attr('value'));
             });
-
-            query.containedIn("marker_symbol", query_array);
+            var lookupQuery = new Parse.Query(MakerMap.Model.PrimaryClassification);
+            lookupQuery.containedIn("objectId", query_array);
+            query.matchesKeyInQuery("classification", "objectId", lookupQuery);
         }
 
         query.find({
@@ -302,6 +317,7 @@
                     makersLayer.add(makerToFeature(resp[i]));
                 }
                 makersLayer.setMap(map);
+                setupEventListeners();
             },
             failure: function(err) {
                 alert("Error loading markers: " + err);
@@ -309,7 +325,7 @@
         });
     }
 
-    $(function() {
+    function setupEventListeners() {
         makersLayer.addListener('click', function(event) {
             infoWindow.setContent(
                 '<h2>'+event.feature.getProperty('title')+'</h2>'+
@@ -319,7 +335,7 @@
             anchor.set("position",event.latLng);
             infoWindow.open(map,anchor);
         });
-    });
+    };
 
     //Init the parse API
     Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
