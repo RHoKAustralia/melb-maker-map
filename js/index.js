@@ -170,7 +170,7 @@
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
             $('.addContentMenu').show();
-            console.log('content');
+            makersLayer.setMap(null);
         });
 
         $aboutNav.click(function () {
@@ -184,7 +184,7 @@
             $('.searchMenu').show();
             $('.aboutMenu').hide();
             $('.addContentMenu').hide();
-            console.log('search');
+            makersLayer.setMap(map);
         });
         
         // Load classifications
@@ -336,6 +336,10 @@
             infoWindow.open(map,anchor);
         });
     };
+
+    $(document).ready(function(){
+        $('#location').geocomplete();
+    });
 
     //Init the parse API
     Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
