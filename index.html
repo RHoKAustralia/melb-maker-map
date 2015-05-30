@@ -26,7 +26,7 @@
 
             <div class="menu">
                 <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource" target="_blank"><i class="icon-plus"></i><br/> Add a Resource</a>
-                <a href="#aboutModal" role="button" class="action aboutMap" title="About the Map" data-toggle="modal"><i class="icon-map-marker"></i><br/>About the Map</a>
+                <a href="javascript:void(0)" role="button" class="action aboutMap" title="About the Map" data-toggle="modal" data-target="#aboutModal"><i class="icon-map-marker"></i><br/>About the Map</a>
             </div><!-- .menu -->
 
             <div class="aboutWrap">
@@ -35,10 +35,7 @@
                     <h2>Join the Maker Movement</h2>
                     <p>The Maker Map is an ongoing open source project which aims to create a global database of maker resources  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device.</p> 
                     <p>If you would like to help you can start by mapping a resource, joining the project discussion or checking out the map source on github.</p>
-                    <div class="searchAction">
-                        Search...
-                        <div class="searchIcon"><i class="icon-search"></i></div>
-                    </div>
+
                     <div class="mapActions">
                         <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource"  target="_blank"><i class="icon-plus"></i><br/>Add a Resource</a>
                         <a href="https://github.com/RHoKAustralia/melb-maker-map" class="action mapSource" title="View the Map Source" target="_blank"><i class="icon-github-alt"></i><br/>The Map Source</a>
@@ -92,9 +89,13 @@
         </div>
 
         <!-- Modal -->
-        <div id="aboutModal" class="modal hide fade" tabindex="-1" role="dialog" >
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <div class="modal-body"></div>
+        <div id="aboutModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <div class="modal-body"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Scripts -->

@@ -254,8 +254,7 @@
 			$('#aboutModal .modal-body').html(aboutContent);
 			
 			$('.about .searchAction').click(function(){
-				console.log('click');
-				$('#aboutModal').modal('hide')
+				$('#aboutModal').modal('hide');
 				$('#searchForm').focus();
 			});
 			
