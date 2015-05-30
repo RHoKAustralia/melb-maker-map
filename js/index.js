@@ -139,6 +139,7 @@
         // Selectors
         var $searchNav  = $('#search-nav');
         var $addContentNav = $('#add-content-nav');
+        var $aboutNav = $('#about-nav');
         var $window = $(window);
         var $nav    = $('#topnav a');
         var $search = $('#search');
@@ -167,12 +168,21 @@
 
         $addContentNav.click(function () {
             $('.searchMenu').hide();
+            $('.aboutMenu').hide();
             $('.addContentMenu').show();
+            console.log('content');
+        });
+
+        $aboutNav.click(function () {
+            $('.searchMenu').hide();
+            $('.addContentMenu').hide();
+            $('.aboutMenu').show();
             console.log('content');
         });
 
         $searchNav.click(function () {
             $('.searchMenu').show();
+            $('.aboutMenu').hide();
             $('.addContentMenu').hide();
             console.log('search');
         });
