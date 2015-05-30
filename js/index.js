@@ -320,7 +320,7 @@
     }
 
     $(function() {
-        map.data.addListener('click', function(event) {
+        makersLayer.addListener('click', function(event) {
             infoWindow.setContent(
                 '<h2>'+event.feature.getProperty('title')+'</h2>'+
                 '<p>'+event.feature.getProperty('description')+'</p>'
