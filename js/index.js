@@ -327,12 +327,6 @@
         });
     };
 
-    $(document).ready(function(){
-        $('#location').geocomplete({
-            map: document.getElementById("map-canvas")
-        });
-    });
-
     //Init the parse API
     Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
     /**
@@ -345,5 +339,10 @@
 		mobileMenu();
 	$('.aboutMenu').hide();
     initSocialite();
-
+    
+    $(document).ready(function(){
+        $('#location').geocomplete({
+            map: map
+        });
+    });
 })(jQuery);
