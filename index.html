@@ -25,50 +25,74 @@
             </div><!-- .header -->
 
             <div class="menu">
-                <a href="javascript:void(0)" role="button" class="action aboutMap" title="About the Map" data-toggle="modal" data-target="#aboutModal"><i class="icon-map-marker"></i><br/>About the Map</a>
-                <a href="javascript:alert('TODO: Replace with a list')" class="action addResource" title="List all spaces" target="_blank"><i class="icon-list"></i><br/>List all spaces</a>
+                <a class="action addResource" title="Search Maker Maps" target="_blank" id='search-nav'><i class="icon-search"></i><br/> Search Maker Map</a>
+                <a class="action addResource" title="Add a Resource" target="_blank" id="add-content-nav"><i class="icon-plus"></i><br/> Add a Resource</a>
+                <a href="#aboutModal" role="button" class="action aboutMap" title="About the Map" data-toggle="modal"><i class="icon-map-marker"></i><br/>About the Map</a>
             </div><!-- .menu -->
 
-            <div class="aboutWrap">
-                <div class="about">
-                    <h1>Find or Map a Resource</h1>
-                    <h2>Join the Maker Movement</h2>
-                    <p>The Maker Map is an ongoing open source project which aims to create a global database of maker resources  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device.</p> 
-                    <p>If you would like to help you can start by mapping a resource, joining the project discussion or checking out the map source on github.</p>
+            <div class="searchMenu">
+                <div class="aboutWrap">
+                    <div class="about">
+                        <h1>Find or Map a Resource</h1>
+                        <h2>Join the Maker Movement</h2>
+                        <p>The Maker Map is an ongoing open source project which aims to create a global database of maker resources  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device.</p> 
+                        <p>If you would like to help you can start by mapping a resource, joining the project discussion or checking out the map source on github.</p>
+                        <div class="searchAction">
+                            Search...
+                            <div class="searchIcon"><i class="icon-search"></i></div>
+                        </div>
+                        <div class="mapActions">
+                            <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource"  target="_blank"><i class="icon-plus"></i><br/>Add a Resource</a>
+                            <a href="https://github.com/RHoKAustralia/melb-maker-map" class="action mapSource" title="View the Map Source" target="_blank"><i class="icon-github-alt"></i><br/>The Map Source</a>
+                        </div>
+                    </div><!-- .about -->
+                </div><!-- .aboutWrap -->
 
-                    <div class="mapActions">
-                        <a href="javascript:alert('TODO: Replace with a form/dialog that lets us upload stuff to Parse.com')" class="action addResource" title="Add a Resource"  target="_blank"><i class="icon-plus"></i><br/>Add a Resource</a>
-                        <a href="https://github.com/RHoKAustralia/melb-maker-map" class="action mapSource" title="View the Map Source" target="_blank"><i class="icon-github-alt"></i><br/>The Map Source</a>
-                    </div>
-                </div><!-- .about -->
-            </div><!-- .aboutWrap -->
+                <div class="searchWrap">
+                    <form id="search">
+                        <input id="searchForm" type="text" placeholder="Search..." />
+                    </form>
+                    <div class="searchIcon"><i class="icon-search"></i></div>
+                    <div class="filterIcon"><i class="icon-tags"></i></div>
+                </div><!-- .searchWrap -->
 
-            <div class="searchWrap">
-                <form id="search">
-                    <input id="searchForm" type="text" placeholder="Search..." />
-                </form>
-                <div class="searchIcon"><i class="icon-search"></i></div>
-                <div class="filterIcon"><i class="icon-tags"></i></div>
-            </div><!-- .searchWrap -->
+                <div class="filterWrap">
+                    <div class="filterHeader">Filter By Business Type <i class="icon-caret-up"></i></div>
+                    <form id="filter">
+                        <ul class="filters">
+                            <li><label class="any-filter">Any<input type="checkbox" value="any"></label></li>
+                            <li><label>Retail<input type="checkbox" checked="checked" value="retail"></label></li>
+                            <li><label>Workspace<input type="checkbox" checked="checked" value="workspace"></label></li>
+                            <li><label>Fabricator<input type="checkbox" checked="checked" value="fabricator"></label></li>
+                            <li><label>Distributor<input type="checkbox" checked="checked" value="distributor"></label></li>
+                            <li><label>Museum<input type="checkbox" checked="checked" value="museum"></label></li>
+                            <li><label>Service<input type="checkbox" checked="checked" value="service"></label></li>
+                            <li><label>Incubator<input type="checkbox" checked="checked" value="incubator"></label></li>
+                            <li><label>Tools<input type="checkbox" value="tools"></label></li>
+                            <li><label>Skills<input type="checkbox" value="skills"></label></li>
+                            <li><label>People<input type="checkbox" value="people"></label></li>
+                        </ul>
+                    </form>
+                </div><!-- .filterWrap -->
+            </div><!-- .searchMenu -->
 
-            <div class="filterWrap">
-                <div class="filterHeader">Filter By Business Type <i class="icon-caret-up"></i></div>
-                <form id="filter">
-                    <ul class="filters">
-                        <li><label class="any-filter">Any<input type="checkbox" value="any"></label></li>
-                        <li><label>Retail<input type="checkbox" checked="checked" value="retail"></label></li>
-                        <li><label>Workspace<input type="checkbox" checked="checked" value="workspace"></label></li>
-                        <li><label>Fabricator<input type="checkbox" checked="checked" value="fabricator"></label></li>
-                        <li><label>Distributor<input type="checkbox" checked="checked" value="distributor"></label></li>
-                        <li><label>Museum<input type="checkbox" checked="checked" value="museum"></label></li>
-                        <li><label>Service<input type="checkbox" checked="checked" value="service"></label></li>
-                        <li><label>Incubator<input type="checkbox" checked="checked" value="incubator"></label></li>
-                        <li><label>Tools<input type="checkbox" value="tools"></label></li>
-                        <li><label>Skills<input type="checkbox" value="skills"></label></li>
-                        <li><label>People<input type="checkbox" value="people"></label></li>
-                    </ul>
-                </form>
-            </div><!-- .filterWrap -->
+            <!-- ADD CONTENT SECTION -->
+
+            <div class="addContentMenu">
+                <div class="addInputWrap">
+                    <input type="text" class="form-control" id="title" placeholder="Title">
+                    <input type="text" class="form-control" id="location" placeholder="Address">
+                </div><!-- .addContentWrap -->
+
+                <div class="checkBoxWrap">
+                    <label>
+                        <input type="checkbox"> Check me out
+                    </label>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div><!-- .checkBoxWrap -->
+            </div><!-- .addContentMenu -->
+            
+            <!-- END OF CONTENT SECTION -->
 
             <div class="footerWrap">
                 <div class="footer">

@@ -195,6 +195,8 @@
      */
     function initEventListeners () {
         // Selectors
+        var $searchNav  = $('#search-nav');
+        var $addContentNav = $('#add-content-nav');
         var $window = $(window);
         var $nav    = $('#topnav a');
         var $search = $('#search');
@@ -219,6 +221,18 @@
                 });
                 return $tooltip;
             }
+        });
+
+        $addContentNav.click(function () {
+            $('.searchMenu').hide();
+            $('.addContentMenu').show();
+            console.log('content');
+        });
+
+        $searchNav.click(function () {
+            $('.searchMenu').show();
+            $('.addContentMenu').hide();
+            console.log('search');
         });
 
         // Search
