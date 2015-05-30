@@ -211,7 +211,7 @@
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
                     var cls = resp[i];
-                    filterList.append("<li><label>" + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
+                    filterList.append("<li><label><img width='16' height='16' src='" + getIcon(cls.get("name")) + "' /> " + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
                 }
                 
                 // Filter
