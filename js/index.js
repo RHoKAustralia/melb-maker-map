@@ -13,8 +13,8 @@
     /**
      * Storage objects
      */
-    var map, layer;
     var makersLayer;
+    var map, layer, infoWindow;
 
     /**
      * Window rendering handler.
@@ -160,6 +160,9 @@
         map.mapTypes.set('map-style', styledMapType);
         map.setMapTypeId('map-style');
 
+        infoWindow = new google.maps.InfoWindow({
+            content: ""
+        });
         loadData();
 
         if (navigator && navigator.geolocation) {
@@ -256,7 +259,7 @@
 				$('#searchForm').focus();
 			});
 			
-		}
+    		}
 
     function initSocialite() {
         Socialite.load($('div.footer'));
@@ -316,6 +319,18 @@
             }
         });
     }
+
+    $(function() {
+        makersLayer.addListener('click', function(event) {
+            infoWindow.setContent(
+                '<h2>'+event.feature.getProperty('title')+'</h2>'+
+                '<p>'+event.feature.getProperty('description')+'</p>'
+            );
+            var anchor = new google.maps.MVCObject();
+            anchor.set("position",event.latLng);
+            infoWindow.open(map,anchor);
+        });
+    });
 
     //Init the parse API
     Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
