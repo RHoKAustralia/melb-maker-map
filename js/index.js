@@ -227,13 +227,13 @@
         });
 
         $search.find('input').keyup(function () {
-            layer.setQuery(generateQuery());
+            loadData();
         });
 
         // Filter
         $filter.find('input').click(function (e) {
             updateAnyCheckbox(e);
-            layer.setQuery(generateQuery());
+            loadData();
         });
     }
 
@@ -291,6 +291,8 @@
     }
 
     function loadData() {
+        var query_array = [];
+
         // Detach the layer before replacing
         if (makersLayer) {
             makersLayer.setMap(null);
@@ -305,7 +307,15 @@
             };
         });
         var query = new Parse.Query(MakerMap.Model.Maker);
-        
+
+        if($('#filter').find('input[value="any"]:checked').length == 0) {
+            $('#filter').find('input[type="checkbox"]:checked').each(function () {
+                query_array.push($(this).attr('value'));
+            });
+
+            query.containedIn("marker_symbol", query_array);
+        }
+
         query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
