@@ -328,7 +328,9 @@
     };
 
     $(document).ready(function(){
-        $('#location').geocomplete();
+        $('#location').geocomplete({
+            map: document.getElementById("map-canvas")
+        });
     });
 
     //Init the parse API
