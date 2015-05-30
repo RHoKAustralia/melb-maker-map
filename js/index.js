@@ -227,13 +227,13 @@
         });
 
         $search.find('input').keyup(function () {
-            layer.setQuery(generateQuery());
+            loadData();
         });
 
         // Filter
         $filter.find('input').click(function (e) {
             updateAnyCheckbox(e);
-            layer.setQuery(generateQuery());
+            loadData();
         });
     }
 
@@ -287,10 +287,13 @@
         if (!symbolName || symbolName == "") {
             return null;
         }
-        return "/img/markers/" + symbolName + ".png";
+        //HACK: Should be a better way to get the URL base of index.html
+        return window.location.pathname.replace("index.html", "img/markers/" + symbolName + ".png");
     }
 
     function loadData() {
+        var query_array = [];
+
         // Detach the layer before replacing
         if (makersLayer) {
             makersLayer.setMap(null);
@@ -305,7 +308,15 @@
             };
         });
         var query = new Parse.Query(MakerMap.Model.Maker);
-        
+
+        if($('#filter').find('input[value="any"]:checked').length == 0) {
+            $('#filter').find('input[type="checkbox"]:checked').each(function () {
+                query_array.push($(this).attr('value'));
+            });
+
+            query.containedIn("marker_symbol", query_array);
+        }
+
         query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
