@@ -272,10 +272,20 @@
             },
             properties: {
                 title: mkr.get("title"),
-                description: mkr.get("description")
+                description: mkr.get("description"),
+                marker_color: mkr.get("marker_color"),
+                marker_size: mkr.get("marker_size"),
+                marker_symbol: mkr.get("marker_symbol")
             }
         };
         return new google.maps.Data.Feature(obj);
+    }
+    
+    function getIcon(symbolName) {
+        if (!symbolName || symbolName == "") {
+            return null;
+        }
+        return "/images/" + symbolName + ".png";
     }
 
     function loadData() {
@@ -283,7 +293,15 @@
         if (makersLayer) {
             makersLayer.setMap(null);
         }
-        makersLayer = new google.maps.Data();
+        makersLayer = new google.maps.Data()
+        makersLayer.setStyle(function(feature) {
+            return {
+                fillColor: feature.getProperty("marker_color"),
+                clickable: true,
+                title: feature.getProperty("title"),
+                icon: getIcon(feature.getProperty("marker_symbol"))
+            };
+        });
         var query = new Parse.Query(MakerMap.Model.Maker);
         query.find({
             success: function(resp) {
