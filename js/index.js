@@ -14,6 +14,7 @@
      * Storage objects
      */
     var map, layer;
+    var makersLayer;
 
     /**
      * Window rendering handler.
@@ -159,10 +160,6 @@
         map.mapTypes.set('map-style', styledMapType);
         map.setMapTypeId('map-style');
 
-        layer = new google.maps.FusionTablesLayer({
-            query:  generateQuery(),
-            map:    map
-        });
         loadData();
 
         if (navigator && navigator.geolocation) {
@@ -282,15 +279,21 @@
     }
 
     function loadData() {
+        // Detach the layer before replacing
+        if (makersLayer) {
+            makersLayer.setMap(null);
+        }
+        makersLayer = new google.maps.Data();
         var query = new Parse.Query(MakerMap.Model.Maker);
         query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
-                    map.data.add(makerToFeature(resp[i]));
+                    makersLayer.add(makerToFeature(resp[i]));
                 }
+                makersLayer.setMap(map);
             },
             failure: function(err) {
-                
+                alert("Error loading markers: " + err);
             }
         })
     }
