@@ -292,6 +292,7 @@
                     makersLayer.add(makerToFeature(resp[i]));
                 }
                 makersLayer.setMap(map);
+                setupEventListeners();
             },
             failure: function(err) {
                 alert("Error loading markers: " + err);
@@ -299,7 +300,7 @@
         });
     }
 
-    $(function() {
+    function setupEventListeners() {
         makersLayer.addListener('click', function(event) {
             infoWindow.setContent(
                 '<h2>'+event.feature.getProperty('title')+'</h2>'+
@@ -309,7 +310,7 @@
             anchor.set("position",event.latLng);
             infoWindow.open(map,anchor);
         });
-    });
+    };
 
     //Init the parse API
     Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
