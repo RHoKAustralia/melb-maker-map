@@ -282,7 +282,10 @@
     }
     
     function getIcon(symbolName) {
-        return symbolName;
+        if (!symbolName || symbolName == "") {
+            return null;
+        }
+        return "/images/" + symbolName + ".png";
     }
 
     function loadData() {
