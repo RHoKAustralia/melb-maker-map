@@ -154,6 +154,7 @@
         // Selectors
         var $searchNav  = $('#search-nav');
         var $addContentNav = $('.addContent');
+        var $addResourceNav = $('.addResource');
         var $aboutNav = $('#about-nav');
         var $window = $(window);
         var $nav    = $('#topnav a');
@@ -184,13 +185,22 @@
         $addContentNav.click(function () {
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
+            $('.addResourceMenu').hide();
             $('.addContentMenu').show();
+            makersLayer.setMap(null);
+        });
+        $addResourceNav.click(function () {
+            $('.searchMenu').hide();
+            $('.aboutMenu').hide();
+            $('.addResourceMenu').show();
+            $('.addContentMenu').hide();
             makersLayer.setMap(null);
         });
 
         $aboutNav.click(function () {
             $('.searchMenu').hide();
             $('.addContentMenu').hide();
+            $('.addResourceMenu').hide();
             $('.aboutMenu').show();
             console.log('content');
         });
@@ -198,6 +208,7 @@
         $searchNav.click(function () {
             $('.searchMenu').show();
             $('.aboutMenu').hide();
+            $('.addResourceMenu').hide();
             $('.addContentMenu').hide();
             makersLayer.setMap(map);
         });

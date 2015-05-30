@@ -28,8 +28,8 @@
 
             <div class="menu">
                 <a class="action addResource" role="button" title="Search Maker Maps" target="_blank" id='search-nav'><i class="fa fa-2x fa-search"></i><br/> Search Maker Map</a>
-                <a class="action addResource addContent" role="button" title="Add Maker Space" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Maker Space</a>
-                <a class="action addResource addContent" role="button" title="Add Materials or Tools" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Materials or Tools</a>
+                <a class="action addContent" role="button" title="Add Maker Space" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Maker Space</a>
+                <a class="action addResource" role="button" title="Add Materials or Tools" target="_blank" id="add-resource-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Materials or Tools</a>
                 <a class="action aboutMap" href="#aboutModal" role="button" title="About Maker Map" id="about-nav"><i class="fa fa-2x fa-info-circle"></i><br/>About Maker Map</a>
             </div><!-- .menu -->
 
@@ -94,6 +94,41 @@
                         <input type="email" class="form-control" id="location" placeholder="Email address">
                         <input type="url" class="form-control" id="location" placeholder="Website">
                         <textarea class="form-control" id="description" placeholder="Give us a description of your place"></textarea>
+                        <input type="text" class="form-control" id="contributor" placeholder="Your name">
+                        </div>
+                    </div><!-- .addContentWrap -->
+
+                    <div class="checkBoxWrap">
+                        <label>
+                            <input type="checkbox"> Supplier
+                        </label>
+                        </p>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                        </div>
+                    </div><!-- .checkBoxWrap -->
+                </div><!-- .addContentWrap -->
+            </div><!-- .addContentMenu -->
+            
+            <!-- END OF CONTENT SECTION -->
+            <!-- ADD RESOURCE SECTION -->
+
+            <div class="addResourceMenu">
+                <div class="addResourceWrap">
+                    <div class="addInputWrap">
+                    <div class="form-group">
+                        <select class="form-control" placeholder="Resource tyles">
+                            <option>Raw Materials</option>
+                            <option>Second Hand Tools</option>
+                            <option>Skills Transfer</option>
+                        </select>
+                        <input type="text" class="form-control" id="title" placeholder="Title">
+                        <input type="text" class="form-control" id="quantity" placeholder="Quantity">
+                        <input type="text" class="form-control" id="location" placeholder="Address">
+                        <input type="text" class="form-control" id="businessHours" placeholder="Business hours">
+                        <input type="text" class="form-control" id="contact" placeholder="Contact Details">
+                        <input type="url" class="form-control" id="location" placeholder="Website">
+                        <textarea class="form-control" id="description" placeholder="Detailed description of resources avaliable"></textarea>
                         <input type="text" class="form-control" id="contributor" placeholder="Your name">
                         </div>
                     </div><!-- .addContentWrap -->
