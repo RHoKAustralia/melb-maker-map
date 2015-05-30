@@ -6,9 +6,13 @@
 
 (function($){
     /**
-     * Configuration
+     * Parse Application ID
      */
-    var dataProvider = '1tteiG-HYAlsmh3ef5U-XVDEWu5QXqDxqWwDx-pc';
+    var PARSE_APP_ID = 'wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr';
+    /**
+     * Parse ID for JavaScript API
+     */
+    var PARSE_JS_ID = '3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG';
 
     /**
      * Storage objects
@@ -24,6 +28,19 @@
         var calc    = $(window).height() - $map.position().top;
 
         $map.css('height', calc + 'px');
+    }
+    
+    /**
+     * Strips all HTML tags from the given string
+     * 
+     * @param {String} dirtyString
+     * 
+     * @return {String}
+     */
+    function stripHTML(dirtyString) {
+        var container = document.createElement('div');
+        container.innerHTML = dirtyString;
+        return container.textContent || container.innerText;
     }
 
     /**
@@ -64,10 +81,10 @@
             zoom: 9,
             disableDefaultUI: true,
             zoomControl: true,
-    		zoomControlOptions: {
-    			style: google.maps.ZoomControlStyle.LARGE,
-    			position: google.maps.ControlPosition.TOP_RIGHT
-    		},
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE,
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
             streetViewControl: true
         });
 
@@ -112,25 +129,23 @@
         }
     }
 
-		function locateMe () {
-			navigator.geolocation.getCurrentPosition(function(position) {
-	      var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-	      map.setCenter(latlng);
-	      map.setZoom(12);
-	
-				$('.locateMe').fadeIn(1000,function(){
-					$(this).tooltip('show');
-				}).css("display",'table');
-				
-	    });
-	
-			$('.locateMe').click(function(){
-				locateMe();
-			});
-			
-		}
-		
-		
+    /**
+     * Centers the map to the user's geolocated position
+     */
+    function locateMe () {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            map.setCenter(latlng);
+            map.setZoom(12);
+    
+            $('.locateMe').fadeIn(1000,function(){
+                $(this).tooltip('show');
+            }).css("display",'table');
+        });
+        $('.locateMe').click(function(){
+            locateMe();
+        });
+    }
 
     /**
      * UI events
@@ -187,13 +202,16 @@
             makersLayer.setMap(map);
         });
         
+        var filterList = $("ul.filters");
         // Load classifications
+        var listBusy = $("<li><label>Loading Classifications ...</label></li>");
+        listBusy.appendTo(filterList);
         var classQry = new Parse.Query(MakerMap.Model.PrimaryClassification);
         classQry.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
                     var cls = resp[i];
-                    $("ul.filters").append("<li><label>" + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
+                    filterList.append("<li><label>" + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
                 }
                 
                 // Filter
@@ -201,9 +219,12 @@
                     updateAnyCheckbox(e);
                     loadData();
                 });
+                
+                listBusy.remove();
             },
             failure: function(err) {
                 alert("An error occurred loading primary classifications: " + err);
+                listBusy.remove();
             }
         });
 
@@ -217,23 +238,26 @@
         });
     }
 
-		function filterMenu() {
-			$('.filterIcon').click(function(){
-				$('.filterWrap').slideToggle();
-			});
-		}
-		
-		function mobileMenu() {
-			$('.menuToggle').click(function(){
-				$('.aboutWrap').slideToggle();
-			});
-		}
-		
+    function filterMenu() {
+        $('.filterIcon').click(function(){
+            $('.filterWrap').slideToggle();
+        });
+    }
+    
+    function mobileMenu() {
+        $('.menuToggle').click(function(){
+            $('.aboutWrap').slideToggle();
+        });
+    }
 
     function initSocialite() {
         Socialite.load($('div.footer'));
     }
 
+    /**
+     * Converts a Maker Parse instance to a google.maps.Data.Feature instance
+     * for placement on a map
+     */
     function makerToFeature(mkr) {
         var coords = mkr.get("coordinates").toJSON();
         var obj = {
@@ -265,6 +289,9 @@
             return relPart;
     }
 
+    /**
+     * Reload the markers on the map based on the current search and filtering criteria
+     */
     function loadData() {
         var query_array = [];
         var query = new Parse.Query(MakerMap.Model.Maker);
@@ -278,12 +305,13 @@
             return {
                 fillColor: feature.getProperty("marker_color"),
                 clickable: true,
-                title: feature.getProperty("title"),
+                title: stripHTML(feature.getProperty("title")),
+                maker_title: feature.getProperty("title"),
                 icon: getIcon(feature.getProperty("marker_symbol"))
             };
         });
 
-        search_string = $('#search').find('input').val();
+        var search_string = $('#search').find('input').val();
         if(search_string != "") {
             var title_query = new Parse.Query(MakerMap.Model.Maker);
             var description_query = new Parse.Query(MakerMap.Model.Maker);
@@ -296,6 +324,7 @@
             $('#filter').find('input.classification-filter[type="checkbox"]:checked').each(function () {
                 query_array.push($(this).attr('value'));
             });
+            //This is basically: Maker.classification in [selected object ids from PrimaryClassification]
             var lookupQuery = new Parse.Query(MakerMap.Model.PrimaryClassification);
             lookupQuery.containedIn("objectId", query_array);
             query.matchesKeyInQuery("classification", "objectId", lookupQuery);
@@ -318,7 +347,7 @@
     function setupEventListeners() {
         makersLayer.addListener('click', function(event) {
             infoWindow.setContent(
-                '<h2>'+event.feature.getProperty('title')+'</h2>'+
+                '<h2>'+event.feature.getProperty('maker_title')+'</h2>'+
                 '<p>'+event.feature.getProperty('description')+'</p>'
             );
             var anchor = new google.maps.MVCObject();
@@ -328,16 +357,16 @@
     };
 
     //Init the parse API
-    Parse.initialize("wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr" /* App ID */, "3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG" /* JS Key */);
+    Parse.initialize(PARSE_APP_ID, PARSE_JS_ID);
     /**
      * On load, init maps & start listening for UI events
      */
     render();
     initMaps();
     initEventListeners();
-		filterMenu();
-		mobileMenu();
-	$('.aboutMenu').hide();
+    filterMenu();
+    mobileMenu();
+    $('.aboutMenu').hide();
     initSocialite();
     
     $(document).ready(function(){
