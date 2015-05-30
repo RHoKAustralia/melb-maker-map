@@ -306,7 +306,6 @@
                 fillColor: feature.getProperty("marker_color"),
                 clickable: true,
                 title: stripHTML(feature.getProperty("title")),
-                maker_title: feature.getProperty("title"),
                 icon: getIcon(feature.getProperty("marker_symbol"))
             };
         });
@@ -347,7 +346,7 @@
     function setupEventListeners() {
         makersLayer.addListener('click', function(event) {
             infoWindow.setContent(
-                '<h2>'+event.feature.getProperty('maker_title')+'</h2>'+
+                '<h2>'+event.feature.getProperty('title')+'</h2>'+
                 '<p>'+event.feature.getProperty('description')+'</p>'
             );
             var anchor = new google.maps.MVCObject();
