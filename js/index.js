@@ -153,7 +153,7 @@
     function initEventListeners () {
         // Selectors
         var $searchNav  = $('#search-nav');
-        var $addContentNav = $('#add-content-nav');
+        var $addContentNav = $('.addContent');
         var $aboutNav = $('#about-nav');
         var $window = $(window);
         var $nav    = $('#topnav a');
