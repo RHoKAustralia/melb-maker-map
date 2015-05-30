@@ -7,3 +7,4 @@ i# ignoring temporary files
 *swp
 
 /node_modules
+npm-debug.log
