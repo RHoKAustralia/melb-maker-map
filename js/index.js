@@ -121,10 +121,10 @@
             zoom: 9,
             disableDefaultUI: true,
             zoomControl: true,
-						zoomControlOptions: {
-							style: google.maps.ZoomControlStyle.LARGE,
-							position: google.maps.ControlPosition.TOP_RIGHT
-						},
+    		zoomControlOptions: {
+    			style: google.maps.ZoomControlStyle.LARGE,
+    			position: google.maps.ControlPosition.TOP_RIGHT
+    		},
             streetViewControl: true
         });
 
