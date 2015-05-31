@@ -385,6 +385,7 @@
     filterMenu();
     mobileMenu();
     $('.aboutMenu').hide();
+    $('.addResourceMenu').hide();
     initSocialite();
     
     $(document).ready(function(){
