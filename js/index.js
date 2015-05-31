@@ -357,8 +357,7 @@
         
         var query_array = [];
         var query = new Parse.Query(MakerMap.Model.Maker);
-        query.include("classification");
-
+        
         // Detach the layer before replacing
         if (makersLayer) {
             makersLayer.setMap(null);
@@ -381,7 +380,7 @@
             description_query.contains("description", search_string);
             query = Parse.Query.or(title_query, description_query);
         }
-
+        
         if($('#filter').find('input.classification-filter[value="any"]:checked').length == 0) {
             $('#filter').find('input.classification-filter[type="checkbox"]:checked').each(function () {
                 query_array.push($(this).attr('value'));
@@ -392,6 +391,7 @@
             query.matchesKeyInQuery("classification", "objectId", lookupQuery);
         }
 
+        query.include("classification");
         query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
