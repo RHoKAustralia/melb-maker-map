@@ -302,7 +302,7 @@
         var $addResourceNav = $('.addResource');
         var $aboutNav = $('#about-nav');
         var $window = $(window);
-        var $nav    = $('#topnav a');
+        var $nav    = $('#topn  v a');
         var $search = $('#search');
         var $filter = $('#filter');
         var $newMakerForm = $('#newMaker');
@@ -329,8 +329,11 @@
             }
         });
 
+        // Default render page to have search active
+        $searchNav.addClass("active");
+
         $addContentNav.click(function () {
-            $('.menu a.action').removeClass('active');
+            $('.menu a.menu-btn').removeClass('active');
             $addContentNav.addClass("active");
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
@@ -339,7 +342,7 @@
             makersLayer.setMap(null);
         });
         $addResourceNav.click(function () {
-            $('.menu a.action').removeClass('active');
+            $('.menu a.menu-btn').removeClass('active');
             $addResourceNav.addClass("active");
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
@@ -349,7 +352,7 @@
         });
 
         $aboutNav.click(function () {
-            $('.menu a.action').removeClass('active');
+            $('.menu a.menu-btn').removeClass('active');
             $aboutNav.addClass("active");
             $('.searchMenu').hide();
             $('.addContentMenu').hide();
@@ -359,7 +362,7 @@
         });
 
         $searchNav.click(function () {
-            $('.menu a.action').removeClass('active');
+            $('.menu a.menu-btn').removeClass('active');
             $searchNav.addClass("active");
             $('.searchMenu').show();
             $('.aboutMenu').hide();
