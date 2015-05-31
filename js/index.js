@@ -146,6 +146,39 @@
             locateMe();
         });
     }
+    
+    function resetForm() {
+        //TODO: Clear form fields
+    }
+    
+    /**
+     * 
+     */
+    function submitNewMaker() {
+        showBusyIndicator();
+        var maker = new MakerMap.Model.Maker();
+        maker.set("title", $("#title").val());
+        maker.set("description", $("#description").val());
+        
+        var cls = new MakerMap.Model.PrimaryClassification();
+        cls.id = $("#classification").val();
+        
+        maker.set("classification", cls);
+        
+        maker.set("coordinates", new Parse.GeoPoint({ longitude: parseFloat($("#new_maker_longitude").val()), latitude: parseFloat($("#new_maker_latitude").val()) }));
+        maker.save(null, {
+            success: function(resp) {
+                alert("New maker saved");
+                resetForm();
+                hideBusyIndicator();
+                loadData();
+            },
+            error: function(resp, error) {
+                alert("Error saving new maker: " + error);
+                hideBusyIndicator();
+            }
+        });
+    }
 
     /**
      * UI events
@@ -160,6 +193,7 @@
         var $nav    = $('#topnav a');
         var $search = $('#search');
         var $filter = $('#filter');
+        var $submit = $('#newMaker');
 
         // Resize handler
         $window.resize(render);
@@ -213,6 +247,12 @@
             makersLayer.setMap(map);
         });
         
+        $submit.submit(function() {
+            submitNewMaker();
+            return false;
+        });
+        
+        var clsList = $("#classification");
         var filterList = $("ul.filters");
         // Load classifications
         var listBusy = $("<li><label>Loading Classifications ...</label></li>");
@@ -223,6 +263,7 @@
                 for (var i = 0; i < resp.length; i++) {
                     var cls = resp[i];
                     filterList.append("<li><label><img width='16' height='16' src='" + getIcon(cls.get("name")) + "' /> " + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
+                    clsList.append("<option value='" + cls.id + "'>" + cls.get("friendlyName") + "</option>")
                 }
                 
                 // Filter
@@ -282,7 +323,7 @@
                 description: mkr.get("description"),
                 marker_color: mkr.get("marker_color"),
                 marker_size: mkr.get("marker_size"),
-                marker_symbol: mkr.get("marker_symbol")
+                marker_symbol: mkr.get("classification").get("name")
             }
         };
         return new google.maps.Data.Feature(obj);
@@ -299,16 +340,24 @@
         else
             return relPart;
     }
+    
+    function showBusyIndicator() {
+        $("#mainBusy").show();
+    }
+    
+    function hideBusyIndicator() {
+        $("#mainBusy").hide();
+    }
 
     /**
      * Reload the markers on the map based on the current search and filtering criteria
      */
     function loadData() {
-        var busyEl = $("#mainBusy"); 
-        busyEl.show();
+        showBusyIndicator();
         
         var query_array = [];
         var query = new Parse.Query(MakerMap.Model.Maker);
+        query.include("classification");
 
         // Detach the layer before replacing
         if (makersLayer) {
@@ -350,11 +399,11 @@
                 }
                 makersLayer.setMap(map);
                 setupEventListeners();
-                busyEl.hide();
+                hideBusyIndicator();
             },
             failure: function(err) {
                 alert("Error loading markers: " + err);
-                busyEl.hide();
+                hideBusyIndicator();
             }
         });
     }
@@ -389,8 +438,10 @@
     initSocialite();
     
     $(document).ready(function(){
-        $('#location').geocomplete({
-            map: map
+        $('#address').geocomplete({
+            map: map,
+            details: ".maker-coordinates",
+            detailsAttribute: "data-geo"
         });
     });
 })(jQuery);
