@@ -47,7 +47,7 @@
 	box-shadow: @regShadow;
 }
 
-.rounded-corners (@radius: 3px) {
+.rounded-corners (@radius: 0px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
   -ms-border-radius: @radius;
@@ -362,6 +362,9 @@ a.action {
 	.btnReg;
 }
 
+.btn {
+	.rounded-corners;
+}
 a.menu-btn {
 	width: 22%;
 	white-space: normal;
@@ -501,6 +504,7 @@ a.action-large [class^="icon-"],a.action-large [class*=" icon-"] {
 	outline:none;
 	line-height: 1.5em;
 	height: 100%;
+	.rounded-corners;
 }
 
 .addInputWrap input {
