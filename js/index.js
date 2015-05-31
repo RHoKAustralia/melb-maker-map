@@ -147,8 +147,46 @@
         });
     }
     
-    function resetForm() {
+    function resetForm($form) {
         //TODO: Clear form fields
+        $form.find("input").val("");
+        $form.find("textarea").val("");
+    }
+    
+    /**
+     * 
+     */
+    function submitNewAsset() {
+        showBusyIndicator();
+        var asset = new MakerMap.Model.Asset();
+        asset.set("title", $("#asset_title").val());
+        asset.set("description", $("#asset_description").val());
+        asset.set("address", $("#asset_address").val());
+        asset.set("business_hours", $("#asset_businessHours").val());
+        asset.set("quantity", parseInt($("#asset_quantity").val(), 10));
+        asset.set("website", $("#asset_website").val());
+        //asset.set("contact", $("#asset_contact").val());
+        asset.set("owner_name", $("#asset_contributor").val());
+        asset.set("is_supplier", $("#asset_supplier").is(":checked"));
+        
+        var mt = new MakerMap.Model.MaterialType();
+        mt.id = $("#asset_material_type").val();
+        
+        asset.set("material_type", mt);
+        
+        asset.set("coordinates", new Parse.GeoPoint({ longitude: parseFloat($("#asset_longitude").val()), latitude: parseFloat($("#asset_latitude").val()) }));
+        asset.save(null, {
+            success: function(resp) {
+                alert("New resource saved");
+                resetForm($("#newAsset"));
+                hideBusyIndicator();
+                loadData();
+            },
+            error: function(resp, error) {
+                alert("Error saving new resource: " + error);
+                hideBusyIndicator();
+            }
+        });
     }
     
     /**
@@ -157,25 +195,99 @@
     function submitNewMaker() {
         showBusyIndicator();
         var maker = new MakerMap.Model.Maker();
-        maker.set("title", $("#title").val());
-        maker.set("description", $("#description").val());
+        maker.set("title", $("#maker_title").val());
+        maker.set("description", $("#maker_description").val());
         
         var cls = new MakerMap.Model.PrimaryClassification();
-        cls.id = $("#classification").val();
+        cls.id = $("#maker_classification").val();
+        
+        var bt = new MakerMap.Model.BusinessType();
+        bt.id = $("#maker_business_type").val();
         
         maker.set("classification", cls);
         
-        maker.set("coordinates", new Parse.GeoPoint({ longitude: parseFloat($("#new_maker_longitude").val()), latitude: parseFloat($("#new_maker_latitude").val()) }));
+        maker.set("business_type", bt);
+        maker.set("business_hours", $("#maker_businessHours").val());
+        maker.set("phone", $("#maker_phone").val());
+        maker.set("email", $("#maker_email").val());
+        maker.set("website", $("#maker_website").val());
+        maker.set("owner_name", $("#maker_contributor").val());
+        maker.set("is_supplier", $("#maker_supplier").is(":checked"));
+        
+        maker.set("coordinates", new Parse.GeoPoint({ longitude: parseFloat($("#maker_longitude").val()), latitude: parseFloat($("#maker_latitude").val()) }));
         maker.save(null, {
             success: function(resp) {
                 alert("New maker saved");
-                resetForm();
+                resetForm($("#newMaker"));
                 hideBusyIndicator();
                 loadData();
             },
             error: function(resp, error) {
                 alert("Error saving new maker: " + error);
                 hideBusyIndicator();
+            }
+        });
+    }
+
+    function initLookups() {
+        var bTypes = $("#maker_business_type");
+        var mtTypes = $("#asset_material_type");
+        var clsList = $("#maker_classification");
+        var filterList = $("ul.filters");
+        // Load classifications
+        var listBusy = $("<li><label><i class='fa fa-refresh fa-spin'></i> Loading Classifications ...</label></li>");
+        listBusy.appendTo(filterList);
+        
+        var btBusy = $("<li><label><i class='fa fa-refresh fa-spin'></i> Loading Business Types ...</label></li>");
+        btBusy.appendTo(filterList);
+        var classQry = new Parse.Query(MakerMap.Model.PrimaryClassification);
+        classQry.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    var cls = resp[i];
+                    filterList.append("<li><label><img width='16' height='16' src='" + getIcon(cls.get("name")) + "' /> " + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
+                    clsList.append("<option value='" + cls.id + "'>" + cls.get("friendlyName") + "</option>")
+                }
+                
+                // Filter
+                filterList.find('input.classification-filter').click(function (e) {
+                    updateAnyCheckbox(e);
+                    loadData();
+                });
+                
+                listBusy.remove();
+            },
+            failure: function(err) {
+                alert("An error occurred loading primary classifications: " + err);
+                listBusy.remove();
+            }
+        });
+        
+        var mtQuery = new Parse.Query(MakerMap.Model.MaterialType);
+        mtQuery.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    var mt = resp[i];
+                    mtTypes.append("<option value='" + mt.id + "'>" + mt.get("name") + "</option>");
+                }
+            },
+            failure: function(err) {
+                alert("An error occurred loading material types: " + error);
+            }
+        });
+        
+        var btQuery = new Parse.Query(MakerMap.Model.BusinessType);
+        btQuery.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    var bt = resp[i];
+                    bTypes.append("<option value='" + bt.id + "'>" + bt.get("name") + "</option>");
+                    btBusy.remove();
+                }
+            },
+            failure: function(err) {
+                alert("An error occurred loading business types: " + error);
+                btBusy.remove();
             }
         });
     }
@@ -193,7 +305,8 @@
         var $nav    = $('#topnav a');
         var $search = $('#search');
         var $filter = $('#filter');
-        var $submit = $('#newMaker');
+        var $newMakerForm = $('#newMaker');
+        var $newAssetForm = $('#newAsset');
 
         // Resize handler
         $window.resize(render);
@@ -255,38 +368,17 @@
             makersLayer.setMap(map);
         });
         
-        $submit.submit(function() {
+        $newMakerForm.submit(function() {
             submitNewMaker();
             return false;
         });
         
-        var clsList = $("#classification");
-        var filterList = $("ul.filters");
-        // Load classifications
-        var listBusy = $("<li><label>Loading Classifications ...</label></li>");
-        listBusy.appendTo(filterList);
-        var classQry = new Parse.Query(MakerMap.Model.PrimaryClassification);
-        classQry.find({
-            success: function(resp) {
-                for (var i = 0; i < resp.length; i++) {
-                    var cls = resp[i];
-                    filterList.append("<li><label><img width='16' height='16' src='" + getIcon(cls.get("name")) + "' /> " + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
-                    clsList.append("<option value='" + cls.id + "'>" + cls.get("friendlyName") + "</option>")
-                }
-                
-                // Filter
-                $filter.find('input.classification-filter').click(function (e) {
-                    updateAnyCheckbox(e);
-                    loadData();
-                });
-                
-                listBusy.remove();
-            },
-            failure: function(err) {
-                alert("An error occurred loading primary classifications: " + err);
-                listBusy.remove();
-            }
-        });
+        $newAssetForm.submit(function() {
+            submitNewAsset();
+            return false;
+        })
+        
+        initLookups();
 
         // Search
         $search.submit(function () {
@@ -446,9 +538,14 @@
     initSocialite();
     
     $(document).ready(function(){
-        $('#address').geocomplete({
+        $('#maker_address').geocomplete({
             map: map,
             details: ".maker-coordinates",
+            detailsAttribute: "data-geo"
+        });
+        $('#asset_address').geocomplete({
+            map: map,
+            details: ".asset-coordinates",
             detailsAttribute: "data-geo"
         });
     });

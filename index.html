@@ -57,7 +57,7 @@
                 </div><!-- .searchWrap -->
 
                 <div class="filterWrap">
-                    <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter By Primary Classification</div>
+                    <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Makers By Primary Classification</div>
                     <form id="filter">
                         <ul class="filters">
                             <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
@@ -82,32 +82,28 @@
                     <form id="newMaker">
                         <div class="addInputWrap">
                             <div class="form-group">
-                                <select class="form-control" placeholder="Business types" required >
-                                    <option>Hackerspace</option>
-                                    <option>Makerspace</option>
-                                    <option>Store</option>
-                                    <option>Service</option>
+                                <select class="form-control" id="maker_business_type" placeholder="Business types" required >
                                 </select>
-                                <select class="form-control" id="classification" placeholder="Select Primary Classificaton" required >
+                                <select class="form-control" id="maker_classification" placeholder="Select Primary Classificaton" required >
                                 </select>
-                                <input type="text" class="form-control" id="title" placeholder="Name of your space" required >
-                                <input type="text" class="form-control" id="address" placeholder="Address" required >
-                                <input type="text" class="form-control" id="businessHours" placeholder="Business hours">
-                                <input type="tel" class="form-control" id="phone" placeholder="Phone number">
-                                <input type="email" class="form-control" id="email" placeholder="Email address">
-                                <input type="url" class="form-control" id="website" placeholder="Website">
-                                <textarea class="form-control" id="description" placeholder="Give us a description of your place" required ></textarea>
-                                <input type="text" class="form-control" id="contributor" placeholder="Your name" required >
+                                <input type="text" class="form-control" id="maker_title" placeholder="Name of your space" required >
+                                <input type="text" class="form-control" id="maker_address" placeholder="Address" required >
+                                <input type="text" class="form-control" id="maker_businessHours" placeholder="Business hours">
+                                <input type="tel" class="form-control" id="maker_phone" placeholder="Phone number">
+                                <input type="email" class="form-control" id="maker_email" placeholder="Email address">
+                                <input type="url" class="form-control" id="maker_website" placeholder="Website">
+                                <textarea class="form-control" id="maker_description" placeholder="Give us a description of your place" required ></textarea>
+                                <input type="text" class="form-control" id="maker_contributor" placeholder="Your name" required >
                                 <div class="maker-coordinates">
-                                    <input type="hidden" id="new_maker_longitude" data-geo="lng" />
-                                    <input type="hidden" id="new_maker_latitude" data-geo="lat" />
+                                    <input type="hidden" id="maker_longitude" data-geo="lng" />
+                                    <input type="hidden" id="maker_latitude" data-geo="lat" />
                                 </div>
                             </div> <!-- .form-group -->
                         </div><!-- .addContentWrap -->
     
                         <div class="checkBoxWrap">
                             <label>
-                                <input type="checkbox"> Supplier
+                                <input type="checkbox" id="maker_supplier"> Supplier
                             </label>
                             </p>
                             <div class="text-center">
@@ -123,33 +119,38 @@
 
             <div class="addResourceMenu">
                 <div class="addResourceWrap">
-                    <div class="addInputWrap">
-                    <div class="form-group">
-                        <select class="form-control" placeholder="Resource tyles">
-                            <option>Raw Materials</option>
-                            <option>Second Hand Tools</option>
-                            <option>Skills Transfer</option>
-                        </select>
-                        <input type="text" class="form-control" id="title" placeholder="Title">
-                        <input type="text" class="form-control" id="quantity" placeholder="Quantity">
-                        <input type="text" class="form-control" id="location" placeholder="Address">
-                        <input type="text" class="form-control" id="businessHours" placeholder="Business hours">
-                        <input type="text" class="form-control" id="contact" placeholder="Contact Details">
-                        <input type="url" class="form-control" id="location" placeholder="Website">
-                        <textarea class="form-control" id="description" placeholder="Detailed description of resources avaliable"></textarea>
-                        <input type="text" class="form-control" id="contributor" placeholder="Your name">
-                        </div>
-                    </div><!-- .addContentWrap -->
-
-                    <div class="checkBoxWrap">
-                        <label>
-                            <input type="checkbox"> Supplier
-                        </label>
-                        </p>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                        </div>
-                    </div><!-- .checkBoxWrap -->
+                    <form id="newAsset">
+                        <div class="addInputWrap">
+                            <div class="form-group">
+                                <select class="form-control" id="asset_material_type" placeholder="Resource Types">
+                                </select>
+                                <input type="text" class="form-control" id="asset_title" class="" placeholder="Title" required >
+                                <input type="number" class="form-control" id="asset_quantity" placeholder="Quantity" required >
+                                <input type="text" class="form-control" id="asset_address" placeholder="Address" required >
+                                <input type="text" class="form-control" id="asset_businessHours" placeholder="Business hours">
+                                <!--
+                                <input type="text" class="form-control" id="asset_contact" placeholder="Contact Details">
+                                -->
+                                <input type="url" class="form-control" id="asset_website" placeholder="Website">
+                                <textarea class="form-control" id="asset_description" placeholder="Detailed description of resources avaliable" required ></textarea>
+                                <input type="text" class="form-control" id="asset_contributor" placeholder="Your name" required >
+                                <div class="asset-coordinates">
+                                    <input type="hidden" id="asset_longitude" data-geo="lng" />
+                                    <input type="hidden" id="asset_latitude" data-geo="lat" />
+                                </div>
+                            </div>
+                        </div><!-- .addContentWrap -->
+    
+                        <div class="checkBoxWrap">
+                            <label>
+                                <input type="checkbox" class="asset_supplier"> Supplier
+                            </label>
+                            </p>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                            </div>
+                        </div><!-- .checkBoxWrap -->
+                    </form>
                 </div><!-- .addContentWrap -->
             </div><!-- .addContentMenu -->
             
