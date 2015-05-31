@@ -183,6 +183,8 @@
         });
 
         $addContentNav.click(function () {
+            $('.menu a.action').removeClass('active');
+            $addContentNav.addClass("active");
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
             $('.addResourceMenu').hide();
@@ -190,6 +192,8 @@
             makersLayer.setMap(null);
         });
         $addResourceNav.click(function () {
+            $('.menu a.action').removeClass('active');
+            $addResourceNav.addClass("active");
             $('.searchMenu').hide();
             $('.aboutMenu').hide();
             $('.addResourceMenu').show();
@@ -198,6 +202,8 @@
         });
 
         $aboutNav.click(function () {
+            $('.menu a.action').removeClass('active');
+            $aboutNav.addClass("active");
             $('.searchMenu').hide();
             $('.addContentMenu').hide();
             $('.addResourceMenu').hide();
@@ -206,6 +212,8 @@
         });
 
         $searchNav.click(function () {
+            $('.menu a.action').removeClass('active');
+            $searchNav.addClass("active");
             $('.searchMenu').show();
             $('.aboutMenu').hide();
             $('.addResourceMenu').hide();
