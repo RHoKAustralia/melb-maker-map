@@ -79,34 +79,42 @@
 
             <div class="addContentMenu">
                 <div class="addContentWrap">
-                    <div class="addInputWrap">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="title" placeholder="Name of your space">
-                        <select class="form-control" placeholder="Business tyles">
-                            <option>Hackerspace</option>
-                            <option>Makerspace</option>
-                            <option>Store</option>
-                            <option>Service</option>
-                        </select>
-                        <input type="text" class="form-control" id="location" placeholder="Address">
-                        <input type="text" class="form-control" id="businessHours" placeholder="Business hours">
-                        <input type="tel" class="form-control" id="location" placeholder="Phone number">
-                        <input type="email" class="form-control" id="location" placeholder="Email address">
-                        <input type="url" class="form-control" id="location" placeholder="Website">
-                        <textarea class="form-control" id="description" placeholder="Give us a description of your place"></textarea>
-                        <input type="text" class="form-control" id="contributor" placeholder="Your name">
-                        </div>
-                    </div><!-- .addContentWrap -->
-
-                    <div class="checkBoxWrap">
-                        <label>
-                            <input type="checkbox"> Supplier
-                        </label>
-                        </p>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                        </div>
-                    </div><!-- .checkBoxWrap -->
+                    <form id="newMaker">
+                        <div class="addInputWrap">
+                            <div class="form-group">
+                                <select class="form-control" placeholder="Business types" required >
+                                    <option>Hackerspace</option>
+                                    <option>Makerspace</option>
+                                    <option>Store</option>
+                                    <option>Service</option>
+                                </select>
+                                <select class="form-control" id="classification" placeholder="Select Primary Classificaton" required >
+                                </select>
+                                <input type="text" class="form-control" id="title" placeholder="Name of your space" required >
+                                <input type="text" class="form-control" id="address" placeholder="Address" required >
+                                <input type="text" class="form-control" id="businessHours" placeholder="Business hours">
+                                <input type="tel" class="form-control" id="phone" placeholder="Phone number">
+                                <input type="email" class="form-control" id="email" placeholder="Email address">
+                                <input type="url" class="form-control" id="website" placeholder="Website">
+                                <textarea class="form-control" id="description" placeholder="Give us a description of your place" required ></textarea>
+                                <input type="text" class="form-control" id="contributor" placeholder="Your name" required >
+                                <div class="maker-coordinates">
+                                    <input type="hidden" id="new_maker_longitude" data-geo="lng" />
+                                    <input type="hidden" id="new_maker_latitude" data-geo="lat" />
+                                </div>
+                            </div> <!-- .form-group -->
+                        </div><!-- .addContentWrap -->
+    
+                        <div class="checkBoxWrap">
+                            <label>
+                                <input type="checkbox"> Supplier
+                            </label>
+                            </p>
+                            <div class="text-center">
+                                <button type="submit"    class="btn btn-lg btn-primary submit-action">Submit</button>
+                            </div>
+                        </div><!-- .checkBoxWrap -->
+                    </form>
                 </div><!-- .addContentWrap -->
             </div><!-- .addContentMenu -->
             
