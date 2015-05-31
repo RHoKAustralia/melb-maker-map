@@ -121,7 +121,7 @@
 
         infoWindow = new google.maps.InfoWindow({
             content: "",
-            maxWidth: 500
+            maxWidth: 400
         });
         loadData();
 
