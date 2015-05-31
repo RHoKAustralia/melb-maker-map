@@ -412,6 +412,9 @@
      */
     function makerToFeature(mkr) {
         var coords = mkr.get("coordinates").toJSON();
+        if(mkr.get("classification")) {
+            var marker_classification_symbol = mkr.get("classification").get("name")            
+        }
         var obj = {
             id: mkr.id,
             geometry: {
@@ -423,7 +426,8 @@
                 description: mkr.get("description"),
                 marker_color: mkr.get("marker_color"),
                 marker_size: mkr.get("marker_size"),
-                marker_symbol: mkr.get("classification").get("name")
+                website: mkr.get("website"),
+                marker_symbol: marker_classification_symbol
             }
         };
         return new google.maps.Data.Feature(obj);
@@ -456,8 +460,9 @@
         showBusyIndicator();
         
         var query_array = [];
-        var query = new Parse.Query(MakerMap.Model.Maker);
-        
+        var maker_query = new Parse.Query(MakerMap.Model.Maker);
+        var asset_query = new Parse.Query(MakerMap.Model.Asset);
+
         // Detach the layer before replacing
         if (makersLayer) {
             makersLayer.setMap(null);
@@ -474,11 +479,18 @@
 
         var search_string = $('#search').find('input').val();
         if(search_string != "") {
-            var title_query = new Parse.Query(MakerMap.Model.Maker);
-            var description_query = new Parse.Query(MakerMap.Model.Maker);
-            title_query.contains("title", search_string);
-            description_query.contains("description", search_string);
-            query = Parse.Query.or(title_query, description_query);
+            var maker_title_query = new Parse.Query(MakerMap.Model.Maker);
+            var maker_description_query = new Parse.Query(MakerMap.Model.Maker);
+
+            var asset_title_query = new Parse.Query(MakerMap.Model.Asset);
+            var asset_description_query = new Parse.Query(MakerMap.Model.Asset);
+            maker_title_query.contains("title", search_string);
+            maker_description_query.contains("description", search_string);
+            asset_title_query.contains("title", search_string);
+            asset_description_query.contains("description", search_string);
+            
+            maker_query = Parse.Query.or(maker_title_query, maker_description_query);
+            asset_query = Parse.Query.or(asset_title_query, asset_description_query);
         }
         
         if($('#filter').find('input.classification-filter[value="any"]:checked').length == 0) {
@@ -488,11 +500,25 @@
             //This is basically: Maker.classification in [selected object ids from PrimaryClassification]
             var lookupQuery = new Parse.Query(MakerMap.Model.PrimaryClassification);
             lookupQuery.containedIn("objectId", query_array);
-            query.matchesKeyInQuery("classification", "objectId", lookupQuery);
+            maker_query.matchesKeyInQuery("classification", "objectId", lookupQuery);
         }
 
-        query.include("classification");
-        query.find({
+        maker_query.include("classification");
+        maker_query.find({
+            success: function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    makersLayer.add(makerToFeature(resp[i]));
+                }
+                makersLayer.setMap(map);
+                setupEventListeners();
+                hideBusyIndicator();
+            },
+            failure: function(err) {
+                alert("Error loading markers: " + err);
+                hideBusyIndicator();
+            }
+        });
+        asset_query.find({
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
                     makersLayer.add(makerToFeature(resp[i]));
@@ -510,9 +536,15 @@
 
     function setupEventListeners() {
         makersLayer.addListener('click', function(event) {
+            var website_description = "";
+            if(event.feature.getProperty('website')) {
+                website_description = '<div class="map-website"><p>Website: <a href="'+event.feature.getProperty('website')+'">'+event.feature.getProperty('website')+'</a></p></div>';
+            }
             infoWindow.setContent(
-                '<h2>'+event.feature.getProperty('title')+'</h2>'+
-                '<p>'+event.feature.getProperty('description')+'</p>'
+                '<div class="mapDescription"><h3>'+event.feature.getProperty('title')+'</h3>'+
+                '<p>'+event.feature.getProperty('description')+'</p>'+
+                '<p>' + website_description + '</p>' + 
+                '</div>'
             );
             var anchor = new google.maps.MVCObject();
             anchor.set("position",event.latLng);
