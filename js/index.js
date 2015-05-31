@@ -450,10 +450,12 @@
     
     function showBusyIndicator() {
         $("#mainBusy").show();
+        $(".header-img").hide();
     }
     
     function hideBusyIndicator() {
         $("#mainBusy").hide();
+        $(".header-img").show();
     }
 
     /**
