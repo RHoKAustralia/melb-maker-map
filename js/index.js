@@ -8,11 +8,11 @@
     /**
      * Parse Application ID
      */
-    var PARSE_APP_ID = 'wj2jWY2HA6L4C1qpWuZzsruUHkO8BZjIbtUI0hmr';
+    var PARSE_APP_ID = 'Su708lHhVCnadLJRSlRL5jJ245MfBckbZHveyUDG';
     /**
      * Parse ID for JavaScript API
      */
-    var PARSE_JS_ID = '3GNfJdTZKsLlRrqsH1n8vJtrgFCRwuCmfb33Y2JG';
+    var PARSE_JS_ID = '40zU9V2wyVODflUh5tzTYZqGPSBOfFoZa8ra8mAp';
 
     /**
      * Storage objects

@@ -1,0 +1,219 @@
+<script src="./js/parse-1.4.2.js"></script>
+<script src="./js/model.js"></script>
+<script src="jquery-2.1.4.min.js"></script>
+<script>
+	// data mappings to enable export and import
+	// format 
+	// var DATA = [class1,class2,class3]
+	//     where classX is like
+	//		{
+	//			'class': Model class (from js/model.js)
+	//			'displayName': text representation of the model for display purposes
+	//			'includes' :[ // needed for relationships
+	//				{
+	//					'dbColumn': the column in the parent model of the relationship
+	//					'mappedModel': Model of relationship (must exist in)
+	//					'displayName': text representation of relationship display purposes
+	//				}
+	//			]
+	//		}
+
+    // source parse config
+    var PARSE_APP_ID = '';
+    var PARSE_JS_ID = '';
+
+    // destination parse config
+    var EXPORT_PARSE_APP_ID = '';
+    var EXPORT_PARSE_JS_ID = '';
+
+
+    var DATA = [
+        {
+            'class': MakerMap.Model.PrimaryClassification,
+            'displayName': 'PrimaryClassification'
+        },
+        {
+            'class': MakerMap.Model.BusinessType,
+            'displayName': 'BusinessType'
+        },
+        {
+            'class': MakerMap.Model.Maker,
+            'displayName': 'Maker',
+            'includes':
+            [
+                {
+                    'dbColumn': 'classification',
+                    'mappedModel': MakerMap.Model.PrimaryClassification,
+		            'displayName': 'PrimaryClassification'
+                },
+                {
+                    'dbColumn': 'business_type',
+                    'mappedModel': MakerMap.Model.BusinessType,
+		            'displayName': 'BusinessType'
+                }
+            ]
+        },
+        {
+            'class': MakerMap.Model.MaterialType,
+            'displayName': 'MaterialType'
+        },
+        {
+            'class': MakerMap.Model.Asset,
+            'displayName': 'Asset',
+            'includes':
+            [
+                {
+                    'dbColumn': 'material_type',
+                    'mappedModel': MakerMap.Model.MaterialType,
+                    'displayName': 'MaterialType'
+                }
+            ]
+        }
+    ];
+
+
+    Parse.initialize(PARSE_APP_ID, PARSE_JS_ID);
+    var dataExported = dataExport(DATA, function(d){
+    	console.log("Start import");
+    	Parse.initialize(EXPORT_PARSE_APP_ID, EXPORT_PARSE_JS_ID);
+    	dataImport(d, null, function(){
+	    	console.log("Restore old parse config");
+	    	Parse.initialize(PARSE_APP_ID, PARSE_JS_ID);
+    	});
+    });
+
+    function dataExport(DATA, cb){
+    	var urls = [];
+  		for(var i = 0; i < DATA.length; i++){
+  			var item = DATA[i];
+  			var query = new Parse.Query(DATA[i].class); 
+  			urls.push(query.find());
+  		}
+		Parse.Promise.when(urls).done(function() {
+			for(var i = 0; i < DATA.length; i++){
+				DATA[i].rawExport = arguments[i];
+
+			}
+			console.log("data", DATA);
+			if(typeof(cb) === "function") cb(DATA);
+		});
+    }
+
+    function dataImport(DATA,classesImported, cb){
+        var data;
+  		var classesImported = classesImported || [];
+		var urls = [];
+		var itemsToProcess = [];
+		console.log("classes imported", classesImported);
+  		for(var i = 0; i < DATA.length; i++){
+  			var item = DATA[i];
+  			var doExport = false;
+
+			if(classesImported.indexOf(item.displayName) == -1)
+			{
+				doExport = true;
+	  			if(item.includes && item.includes.length > 0){
+		  			for(var j = 0; j < item.includes.length; j++){
+		  				if(classesImported.indexOf(item.includes[j].displayName) == -1){
+		  					doExport = false;
+		  					break;
+		  				}
+		  			}
+	  			}
+			}
+  				
+
+  			if(doExport){
+				itemsToProcess.push(i);
+  			}
+  		}
+  		if(itemsToProcess.length == 0)
+  		{
+  			console.log("No more to process");
+  			if(typeof(cb) === "function") cb();
+  			return;
+  		}
+  		console.log("itemsToProcess", itemsToProcess.map(function(i){ return DATA[i].displayName}));
+  		var itemsToSave = [];
+  		var dataToSave = [];
+  		for(var i = 0; i < itemsToProcess.length; i++){
+  			var itemToProcess = DATA[itemsToProcess[i]];
+	  		var list = [];
+  			for(var j = 0; j < itemToProcess.rawExport.length; j++)
+  			{
+  				var itemData = itemToProcess.rawExport[j];
+	  			var item = new itemToProcess.class(); 
+		        for(var attribute in itemData.attributes){
+		            var val = itemData.attributes[attribute];
+		            if(typeof(val) === "object")
+		            {
+		                if(val.className && val.id)
+		                {
+		                	var mappedId = 0;
+		                	for(var k = 0; k < DATA.length; k++){
+		                		var tmp = new DATA[k].class()
+		                		if(tmp.className === val.className)
+		                		{
+		                			for(var a = 0; a < DATA[k].rawExport.length; a++){
+			                			if(DATA[k].rawExport[a].id == val.id){
+			                				mappedId = DATA[k].rawImport[a].id;
+				                			break;
+			                			}
+		                			}
+		                		}
+		                	}
+		                    var classObject;
+		                    eval('classObject = new MakerMap.Model.' + val.className + '()');
+		                    classObject.id = mappedId;
+		                    item.set(attribute, classObject);
+		                }
+		                else if(val instanceof Parse.GeoPoint)
+		                {
+		                    item.set(attribute, new Parse.GeoPoint({ longitude: val.longitude, latitude: val.latitude }));
+		                }
+		                else
+		                {
+		                    console.log("    unknown attriute " + attribute);
+		                }
+		            }
+		            else
+		            {
+		                if(attribute == "createdAt" || attribute == "updatedAt") continue;
+		                if(attribute == "objectId")
+		                    item.set(attribute + "_old", val);
+		                else
+		                    item.set(attribute, val);
+		            }
+		        }
+		        list.push(item);
+  			}
+  			if(list.length > 0){
+				itemsToSave.push(itemsToProcess[i]);
+				dataToSave.push(list);
+  			}
+  		}
+		console.log("itemsToSave", itemsToSave.map(function(i){ return DATA[i].displayName}));  		
+  		if(itemsToSave.length == 0)
+  		{
+  			console.log("No more to save");
+  			if(typeof(cb) === "function") cb();
+  			return;
+  		}
+  		if(itemsToSave.length > 0){
+  			for(var i = 0; i < dataToSave.length; i++){
+  				urls.push(Parse.Object.saveAll(dataToSave[i]))
+  				//console.log('save me', dataToSave[i]);
+  			}
+  		}
+		Parse.Promise.when(urls).done(function( a1, a2 ) {
+			console.log("calls: "+ arguments.length);
+			for(var i = 0; i < itemsToSave.length; i++){
+				classesImported.push(DATA[itemsToSave[i]].displayName);
+				console.log("result " +  i + ": ", arguments[i]);
+				DATA[itemsToSave[i]].rawImport = arguments[i];
+			}
+			dataImport(DATA, classesImported, cb);
+		});
+    }
+    </script>
+</html>
