@@ -408,7 +408,7 @@
     
     function mobileMenu() {
         $('.menuToggle').click(function(){
-            $('.aboutWrap').slideToggle();
+            $('#mobileWrap').slideToggle();
         });
     }
 
