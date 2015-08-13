@@ -63,22 +63,29 @@
                     <div class="filterIcon"><i class="icon-tags"></i></div>
                 </div><!-- .searchWrap -->
 
-                <div class="filterWrap">
-                    <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Makers By Primary Classification</div>
-                    <form id="filter">
-                        <ul class="filters">
-                            <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
-                        </ul>
-                    </form>
-                </div><!-- .filterWrap -->
-                <div class="filterWrap">
-                    <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Assets By Material Type</div>
-                    <form id="filterMaterials">
-                        <ul class="filters">
-                            <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
-                        </ul>
-                    </form>
-                </div><!-- .filterWrap -->
+                <div class="filtersWrap">
+                  <div class="filterHeader" id="filterType">Search By 
+                    <label><input type="radio" name="type" value="space" checked> Space</label>
+                    <label><input type="radio" name="type" value="resource"> Resource</label>
+                    <label><input type="radio" name="type" value="all"> Both</label>
+                  </div>
+                  <div class="filterWrap">
+                      <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Makers By Primary Classification</div>
+                      <form id="filter">
+                          <ul class="filters">
+                              <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
+                          </ul>
+                      </form>
+                  </div><!-- .filterWrap -->
+                  <div class="filterWrap">
+                      <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Assets By Material Type</div>
+                      <form id="filterMaterials">
+                          <ul class="filters">
+                              <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
+                          </ul>
+                      </form>
+                  </div><!-- .filterWrap -->
+              </div><!-- .filtersWrap -->
             </div><!-- .searchMenu -->
 
             <!-- ABOUT SECTION -->

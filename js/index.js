@@ -236,6 +236,18 @@
         var clsList = $("#maker_classification");
         var filterList = $("#filter ul.filters");
         var filterMaterialsList = $("#filterMaterials ul.filters");
+        var filterType = $("#filterType input[type=radio]");
+
+        filterType.change(function(e){
+          var searchType = jQuery(this).val();
+          var searchSpace = (searchType === "space" || searchType === "all");
+          var searchResource = (searchType === "resource" || searchType === "all");
+
+          jQuery("#filter").closest(".filterWrap").toggle(searchSpace);
+          jQuery("#filterMaterials").closest(".filterWrap").toggle(searchResource);
+          loadData();
+        });
+        $("#filterType input[type=radio]:checked").trigger('change');
         // Load classifications
         var listBusy = $("<li><label><i class='fa fa-refresh fa-spin'></i> Loading Classifications ...</label></li>");
         listBusy.appendTo(filterList);
@@ -248,7 +260,7 @@
                 for (var i = 0; i < resp.length; i++) {
                     var cls = resp[i];
                     filterList.append("<li><label><img width='16' height='16' src='" + getIcon(cls.get("name")) + "' /> " + cls.get("friendlyName") + " <input type='checkbox' class='classification-filter' value='" + cls.id + "' /></label></li>");
-                    clsList.append("<option value='" + cls.id + "'>" + cls.get("friendlyName") + "</option>")
+                    clsList.append("<option value='" + cls.id + "'>" + cls.get("friendlyName") + "</option>");
                 }
                 
                 // Filter
@@ -402,7 +414,7 @@
 
     function filterMenu() {
         $('.filterIcon').click(function(){
-            $('.filterWrap').slideToggle();
+            $('.filtersWrap').slideToggle();
         });
     }
     
@@ -528,36 +540,45 @@
             lookupQuery.containedIn("objectId", query_array);
             asset_query.matchesKeyInQuery("material_type", "objectId", lookupQuery);
         }
-
-        maker_query.include("classification");
-        maker_query.find({
-            success: function(resp) {
-                for (var i = 0; i < resp.length; i++) {
-                    makersLayer.add(makerToFeature(resp[i]));
-                }
-                makersLayer.setMap(map);
-                setupEventListeners();
-                hideBusyIndicator();
-            },
-            failure: function(err) {
-                alert("Error loading markers: " + err);
-                hideBusyIndicator();
-            }
-        });
-        asset_query.find({
-            success: function(resp) {
-                for (var i = 0; i < resp.length; i++) {
-                    makersLayer.add(makerToFeature(resp[i]));
-                }
-                makersLayer.setMap(map);
-                setupEventListeners();
-                hideBusyIndicator();
-            },
-            failure: function(err) {
-                alert("Error loading markers: " + err);
-                hideBusyIndicator();
-            }
-        });
+        
+        var searchType = $("#filterType input[type=radio]:checked").val();
+        var searchSpace = (searchType === "space" || searchType === "all");
+        var searchResource = (searchType === "resource" || searchType === "all");
+        if(searchSpace)
+        {
+          maker_query.include("classification");
+          maker_query.find({
+              success: function(resp) {
+                  for (var i = 0; i < resp.length; i++) {
+                      makersLayer.add(makerToFeature(resp[i]));
+                  }
+                  makersLayer.setMap(map);
+                  setupEventListeners();
+                  hideBusyIndicator();
+              },
+              failure: function(err) {
+                  alert("Error loading markers: " + err);
+                  hideBusyIndicator();
+              }
+          });
+        }
+        if(searchResource)
+        {
+          asset_query.find({
+              success: function(resp) {
+                  for (var i = 0; i < resp.length; i++) {
+                      makersLayer.add(makerToFeature(resp[i]));
+                  }
+                  makersLayer.setMap(map);
+                  setupEventListeners();
+                  hideBusyIndicator();
+              },
+              failure: function(err) {
+                  alert("Error loading markers: " + err);
+                  hideBusyIndicator();
+              }
+          });
+        }
     }
 
     function setupEventListeners() {
