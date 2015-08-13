@@ -50,10 +50,10 @@
      *
      * @return {void}
      */
-    function updateAnyCheckbox (e) {
+    function updateAnyCheckbox (e, parentNode) {
         var $target = $(e.target);
-        var $boxen  = $('#filter').find('input.classification-filter[type="checkbox"]').not('[value="any"]');
-        var $any    = $('#filter').find('input.classification-filter[value="any"]');
+        var $boxen  = $(parentNode).find('input.classification-filter[type="checkbox"]').not('[value="any"]');
+        var $any    = $(parentNode).find('input.classification-filter[value="any"]');
 
         if ($target.val() == 'any') {
             // Update other checkboxes based on "any" state
@@ -234,7 +234,8 @@
         var bTypes = $("#maker_business_type");
         var mtTypes = $("#asset_material_type");
         var clsList = $("#maker_classification");
-        var filterList = $("ul.filters");
+        var filterList = $("#filter ul.filters");
+        var filterMaterialsList = $("#filterMaterials ul.filters");
         // Load classifications
         var listBusy = $("<li><label><i class='fa fa-refresh fa-spin'></i> Loading Classifications ...</label></li>");
         listBusy.appendTo(filterList);
@@ -252,7 +253,7 @@
                 
                 // Filter
                 filterList.find('input.classification-filter').click(function (e) {
-                    updateAnyCheckbox(e);
+                    updateAnyCheckbox(e, filterList);
                     loadData();
                 });
                 
@@ -269,8 +270,13 @@
             success: function(resp) {
                 for (var i = 0; i < resp.length; i++) {
                     var mt = resp[i];
+                    filterMaterialsList.append("<li><label><img width='16' height='16' src='" + getIconMaterials(mt.get("name")) + "' /> " + mt.get("name") + " <input type='checkbox' class='classification-filter' value='" + mt.id + "' /></label></li>");
                     mtTypes.append("<option value='" + mt.id + "'>" + mt.get("name") + "</option>");
                 }
+                filterMaterialsList.find('input.classification-filter').click(function (e) {
+                    updateAnyCheckbox(e, filterMaterialsList);
+                    loadData();
+                });
             },
             failure: function(err) {
                 alert("An error occurred loading material types: " + error);
@@ -436,12 +442,17 @@
         };
         return new google.maps.Data.Feature(obj);
     }
-    
-    function getIcon(symbolName) {
-        if (!symbolName || symbolName == "") {
-            return null;
-        }
-        var relPart = "img/markers/" + symbolName + ".png";
+    function getIconMaterials(symbolName){
+      return getIcon(symbolName, "materials");
+    }
+    function getIcon(symbolName, folderName) {
+      if (!symbolName || symbolName === "") {
+          return null;
+      }
+      if (!folderName || folderName === "") {
+          folderName = "markers";
+      }
+        var relPart = "img/" + folderName + "/" + symbolName + ".png";
         //HACK: Should be a better way to get the URL base of index.html
         if (window.location.pathname.indexOf("index.html") >= 0)
             return window.location.pathname.replace("index.html", relPart);
@@ -507,6 +518,15 @@
             var lookupQuery = new Parse.Query(MakerMap.Model.PrimaryClassification);
             lookupQuery.containedIn("objectId", query_array);
             maker_query.matchesKeyInQuery("classification", "objectId", lookupQuery);
+        }
+        if($('#filterMaterials').find('input.classification-filter[value="any"]:checked').length == 0) {
+            $('#filterMaterials').find('input.classification-filter[type="checkbox"]:checked').each(function () {
+                query_array.push($(this).attr('value'));
+            });
+            //This is basically: Maker.classification in [selected object ids from PrimaryClassification]
+            var lookupQuery = new Parse.Query(MakerMap.Model.MaterialType);
+            lookupQuery.containedIn("objectId", query_array);
+            asset_query.matchesKeyInQuery("material_type", "objectId", lookupQuery);
         }
 
         maker_query.include("classification");
