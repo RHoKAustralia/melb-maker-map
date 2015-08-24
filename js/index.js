@@ -224,7 +224,7 @@
                 loadData();
             },
             error: function(resp, error) {
-                alert("Error saving new maker: " + error);
+                alert("Error saving new maker: " + JSON.stringify(error));
                 hideBusyIndicator();
             }
         });
