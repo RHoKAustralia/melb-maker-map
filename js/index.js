@@ -224,7 +224,7 @@
                 loadData();
             },
             error: function(resp, error) {
-                alert("Error saving new maker: " + error);
+                alert("Error saving new maker: " + JSON.stringify(error));
                 hideBusyIndicator();
             }
         });
@@ -355,7 +355,6 @@
             $('.menu a.menu-btn').removeClass('active');
             $addContentNav.addClass("active");
             $('.searchMenu').hide();
-            $('.aboutMenu').hide();
             $('.addResourceMenu').hide();
             $('.addContentMenu').show();
             makersLayer.setMap(null);
@@ -364,7 +363,6 @@
             $('.menu a.menu-btn').removeClass('active');
             $addResourceNav.addClass("active");
             $('.searchMenu').hide();
-            $('.aboutMenu').hide();
             $('.addResourceMenu').show();
             $('.addContentMenu').hide();
             makersLayer.setMap(null);
@@ -376,7 +374,6 @@
             $('.searchMenu').hide();
             $('.addContentMenu').hide();
             $('.addResourceMenu').hide();
-            $('.aboutMenu').show();
             console.log('content');
         });
 
@@ -384,7 +381,6 @@
             $('.menu a.menu-btn').removeClass('active');
             $searchNav.addClass("active");
             $('.searchMenu').show();
-            $('.aboutMenu').hide();
             $('.addResourceMenu').hide();
             $('.addContentMenu').hide();
             makersLayer.setMap(map);
@@ -611,7 +607,6 @@
     initEventListeners();
     filterMenu();
     mobileMenu();
-    $('.aboutMenu').hide();
     $('.addResourceMenu').hide();
     initSocialite();
     

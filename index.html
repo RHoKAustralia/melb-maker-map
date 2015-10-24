@@ -9,11 +9,13 @@
         <meta property="og:site_name" content="The Maker Network"/>
         <meta property="og:description" content="The Melbourne Maker Network is an ongoing open source project which aims to cre  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device."/>
         <link rel="stylesheet" href="./css/bootstrap.css">
-        <link rel="stylesheet" href="./css/screen.css">                     
+        <link rel="stylesheet" href="./css/screen.css">
         <link rel="stylesheet" href="./css/phone.css" media="only screen and (max-device-width: 480px)">
         <link rel="stylesheet" href="./css/tablet.css" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px)">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/gmaps-sidebar.min.css" />
         <link href="//fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow:400,700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="./css/makermap.css">
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -28,167 +30,196 @@
     '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-594BVF');</script>
     <!-- End Google Tag Manager -->
-        <div id="controlWrap">
-            <div class="header">
-                <i id="mainBusy" class="fa fa-refresh fa-spin fa-2x"></i>
-                <img class="img-responsive header-img" src="img/maker_network_icon.png">
-                <span class="brand">The Maker Network</span>
-                <div class="menuToggle"><i class="fa fa-reorder"></i></div>
-            </div><!-- .header -->
-            <div id="mobileWrap">
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+            </ul>
 
-            <div class="menu">
-                <a class="menu-btn btn btn-primary search" role="button" title="Search Maps" target="_blank" id='search-nav'><i class="fa fa-2x fa-search"></i><br/>Search Map</a>
-                <a class="menu-btn btn btn-primary addContent" role="button" title="Add Space" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Space</a>
-                <a class="menu-btn btn btn-primary addResource" role="button" title="Add Materials or Tools" target="_blank" id="add-resource-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Resource</a>
-                <a class="menu-btn btn btn-primary aboutMap" href="#aboutModal" role="button" title="About Map" id="about-nav"><i class="fa fa-2x fa-info-circle"></i><br/>About  Map</a>
-            </div><!-- .menu -->
+            <ul role="tablist">
+                <li><a href="#about" role="tab"><i class="fa fa-info-circle"></i></a></li>
+            </ul>
+        </div>
 
-            <div class="searchMenu">
-                <div class="aboutWrap">
-                    <div class="about">
-                        <div class="searchAction">
-                            Search...
-                            <div class="searchIcon"><i class="fa fa-search"></i></div>
-                        </div>
-                    </div><!-- .about -->
-                </div><!-- .aboutWrap -->
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                    <div class="header">
+                        <img class="img-responsive header-img" src="img/maker_network_icon.png">
+                        <span class="brand">The Maker Network</span>
+                        <i id="mainBusy" class="fa fa-refresh fa-spin fa-2x"></i>
+                        <!-- <div class="menuToggle"><i class="fa fa-reorder"></i></div> -->
+                    </div><!-- .header -->
+                    <div class="sidebar-close"><i class="fa fa-3x fa-caret-left"></i></div>
+                    <div id="mobileWrap">
 
-                <div class="searchWrap">
-                    <form id="search">
-                        <input id="searchForm" type="text" placeholder="Search..." />
-                    </form>
-                    <!-- FIXME: Not using FontAwesome icon versions because they won't show -->
-                    <div class="searchIcon"><i class="icon-search"></i></div>
-                    <div class="filterIcon"><i class="icon-tags"></i></div>
-                </div><!-- .searchWrap -->
+                    <div class="menu">
+                        <a class="menu-btn btn btn-primary search" role="button" title="Search Maps" target="_blank" id='search-nav'><i class="fa fa-2x fa-search"></i><br/>Search Map</a>
+                        <a class="menu-btn btn btn-primary addContent" role="button" title="Add Space" target="_blank" id="add-content-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Space</a>
+                        <a class="menu-btn btn btn-primary addResource" role="button" title="Add Materials or Tools" target="_blank" id="add-resource-nav"><i class="fa fa-2x fa-plus"></i><br/>Add Resource</a>
+                    </div><!-- .menu -->
 
-                <div class="filtersWrap">
-                  <div class="filterHeader" id="filterType">Search By 
-                    <label><input type="radio" name="type" value="space"> Spaces</label>
-                    <label><input type="radio" name="type" value="resource"> Resources</label>
-                    <label><input type="radio" name="type" value="all" checked> Both</label>
-                  </div>
-                  <div class="filterWrap">
-                      <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Spaces By Primary Classification</div>
-                      <form id="filter">
-                          <ul class="filters">
-                              <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
-                          </ul>
-                      </form>
-                  </div><!-- .filterWrap -->
-                  <div class="filterWrap">
-                      <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Resources By Material Type</div>
-                      <form id="filterMaterials">
-                          <ul class="filters">
-                              <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
-                          </ul>
-                      </form>
-                  </div><!-- .filterWrap -->
-              </div><!-- .filtersWrap -->
-            </div><!-- .searchMenu -->
-
-            <!-- ABOUT SECTION -->
-
-            <div class="aboutMenu">
-                        <h1 class="aboutMenu">Find or Map a Resource</h1>
-                        <h2 class="aboutMenu">Join the Maker Movement</h2>
-                        <p>The Maker Network is an ongoing open source project which aims to create a global database of maker resources  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device.</p> 
-                        <p>If you would like to help you can start by mapping a resource, joining the project discussion or checking out the map source on github.</p>
-            </div><!-- .addContentMenu -->
-
-            <!-- ADD CONTENT SECTION -->
-
-            <div class="addContentMenu">
-                <div class="addContentWrap">
-                    <form id="newMaker">
-                        <div class="addInputWrap">
-                            <div class="form-group">
-                                <select class="form-style" id="maker_business_type" placeholder="Business types" required >
-                                </select>
-                                <select class="form-style" id="maker_classification" placeholder="Select Primary Classificaton" required >
-                                </select>
-                                <input type="text" class="form-style" id="maker_title" placeholder="Name of your space" required >
-                                <input type="text" class="form-style" id="maker_address" placeholder="Address" required >
-                                <input type="text" class="form-style" id="maker_businessHours" placeholder="Business hours">
-                                <input type="tel" class="form-style" id="maker_phone" placeholder="Phone number">
-                                <input type="email" class="form-style" id="maker_email" placeholder="Email address">
-                                <input type="url" class="form-style" id="maker_website" placeholder="Website">
-                                <textarea class="form-style" id="maker_description" placeholder="Give us a description of your place" required ></textarea>
-                                <input type="text" class="form-style" id="maker_contributor" placeholder="Your name" required >
-                                <div class="maker-coordinates">
-                                    <input type="hidden" id="maker_longitude" data-geo="lng" />
-                                    <input type="hidden" id="maker_latitude" data-geo="lat" />
+                    <div class="searchMenu">
+                        <div class="aboutWrap">
+                            <div class="about">
+                                <div class="searchAction">
+                                    Search...
+                                    <div class="searchIcon"><i class="fa fa-search"></i></div>
                                 </div>
-                            </div> <!-- .form-group -->
-                        </div><!-- .addContentWrap -->
-    
-                        <div class="checkBoxWrap">
-                            <label>
-                                <input type="checkbox" id="maker_supplier"> Supplier
-                            </label>
-                            </p>
-                            <div class="text-center">
-                                <button type="submit"    class="btn btn-lg btn-primary submit-action">Submit</button>
-                            </div>
-                        </div><!-- .checkBoxWrap -->
-                    </form>
-                </div><!-- .addContentWrap -->
-            </div><!-- .addContentMenu -->
-            
-            <!-- END OF CONTENT SECTION -->
-            <!-- ADD RESOURCE SECTION -->
+                            </div><!-- .about -->
+                        </div><!-- .aboutWrap -->
 
-            <div class="addResourceMenu">
-                <div class="addResourceWrap">
-                    <form id="newAsset">
-                        <div class="addInputWrap">
-                            <div class="form-group">
-                                <select class="form-style" id="asset_material_type" placeholder="Resource Types">
-                                </select>
-                                <input type="text" class="form-style" id="asset_title" class="" placeholder="Title" required >
-                                <input type="number" class="form-style" id="asset_quantity" placeholder="Quantity" required >
-                                <input type="text" class="form-style" id="asset_address" placeholder="Address" required >
-                                <input type="text" class="form-style" id="asset_businessHours" placeholder="Business hours">
-                                <!--
-                                <input type="text" class="form-style" id="asset_contact" placeholder="Contact Details">
-                                -->
-                                <input type="url" class="form-style" id="asset_website" placeholder="Website">
-                                <textarea class="form-style" id="asset_description" placeholder="Detailed description of resources avaliable" required ></textarea>
-                                <input type="text" class="form-style" id="asset_contributor" placeholder="Your name" required >
-                                <div class="asset-coordinates">
-                                    <input type="hidden" id="asset_longitude" data-geo="lng" />
-                                    <input type="hidden" id="asset_latitude" data-geo="lat" />
-                                </div>
-                            </div>
-                        </div><!-- .addContentWrap -->
-    
-                        <div class="checkBoxWrap">
-                            <label>
-                                <input type="checkbox" class="asset_supplier"> Supplier
-                            </label>
-                            </p>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            </div>
-                        </div><!-- .checkBoxWrap -->
-                    </form>
-                </div><!-- .addContentWrap -->
-            </div><!-- .addContentMenu -->
-            
-            <!-- END OF CONTENT SECTION -->
+                        <div class="searchWrap">
+                            <form id="search">
+                                <input id="searchForm" type="text" placeholder="Search..." />
+                            </form>
+                            <!-- FIXME: Not using FontAwesome icon versions because they won't show -->
+                            <div class="searchIcon"><i class="icon-search"></i></div>
+                            <div class="filterIcon"><i class="icon-tags"></i></div>
+                        </div><!-- .searchWrap -->
 
-            <div class="footerWrap">
-                <div class="footer">
-                    <a class="socialite github-fork"    href="https://github.com/RHoKAustralia/melb-maker-map"
-                                                   data-user="RHoKAustralia"
-                                                   data-repo="melb-maker-map"
-                                                   data-type="fork"
-                                                  data-count="true">Fork on GitHub</a>
-                </div>
+                        <div class="filtersWrap">
+                          <div class="filterHeader" id="filterType">Search By 
+                            <label><input type="radio" name="type" value="space"> Spaces</label>
+                            <label><input type="radio" name="type" value="resource"> Resources</label>
+                            <label><input type="radio" name="type" value="all" checked> Both</label>
+                          </div>
+                          <div class="filterWrap">
+                              <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Spaces By Primary Classification</div>
+                              <form id="filter">
+                                  <ul class="filters">
+                                      <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
+                                  </ul>
+                              </form>
+                          </div><!-- .filterWrap -->
+                          <div class="filterWrap">
+                              <div class="filterHeader"><i class="fa fa-filter"></i>&nbsp;Filter Resources By Material Type</div>
+                              <form id="filterMaterials">
+                                  <ul class="filters">
+                                      <li><label class="any-filter">Any<input type="checkbox" class="classification-filter" value="any" checked></label></li>
+                                  </ul>
+                              </form>
+                          </div><!-- .filterWrap -->
+                      </div><!-- .filtersWrap -->
+                    </div><!-- .searchMenu -->
+
+
+                    <!-- ADD CONTENT SECTION -->
+
+                    <div class="addContentMenu">
+                        <div class="addContentWrap">
+                            <form id="newMaker">
+                                <div class="addInputWrap">
+                                    <div class="form-group">
+                                        <select class="form-style" id="maker_business_type" placeholder="Business types" required >
+                                        </select>
+                                        <select class="form-style" id="maker_classification" placeholder="Select Primary Classificaton" required >
+                                        </select>
+                                        <input type="text" class="form-style" id="maker_title" placeholder="Name of your space" required >
+                                        <input type="text" class="form-style" id="maker_address" placeholder="Address" required >
+                                        <input type="text" class="form-style" id="maker_businessHours" placeholder="Business hours">
+                                        <input type="tel" class="form-style" id="maker_phone" placeholder="Phone number">
+                                        <input type="email" class="form-style" id="maker_email" placeholder="Email address">
+                                        <input type="url" class="form-style" id="maker_website" placeholder="Website">
+                                        <textarea class="form-style" id="maker_description" placeholder="Give us a description of your place" required ></textarea>
+                                        <input type="text" class="form-style" id="maker_contributor" placeholder="Your name" required >
+                                        <div class="maker-coordinates">
+                                            <input type="hidden" id="maker_longitude" data-geo="lng" />
+                                            <input type="hidden" id="maker_latitude" data-geo="lat" />
+                                        </div>
+                                    </div> <!-- .form-group -->
+                                </div><!-- .addContentWrap -->
+            
+                                <div class="checkBoxWrap">
+                                    <label>
+                                        <input type="checkbox" id="maker_supplier"> Supplier
+                                    </label>
+                                    </p>
+                                    <div class="text-center">
+                                        <button type="submit"    class="btn btn-lg btn-primary submit-action">Submit</button>
+                                    </div>
+                                </div><!-- .checkBoxWrap -->
+                            </form>
+                        </div><!-- .addContentWrap -->
+                    </div><!-- .addContentMenu -->
+                    
+                    <!-- END OF CONTENT SECTION -->
+                    <!-- ADD RESOURCE SECTION -->
+
+                    <div class="addResourceMenu">
+                        <div class="addResourceWrap">
+                            <form id="newAsset">
+                                <div class="addInputWrap">
+                                    <div class="form-group">
+                                        <select class="form-style" id="asset_material_type" placeholder="Resource Types">
+                                        </select>
+                                        <input type="text" class="form-style" id="asset_title" class="" placeholder="Title" required >
+                                        <input type="number" class="form-style" id="asset_quantity" placeholder="Quantity" required >
+                                        <input type="text" class="form-style" id="asset_address" placeholder="Address" required >
+                                        <input type="text" class="form-style" id="asset_businessHours" placeholder="Business hours">
+                                        <!--
+                                        <input type="text" class="form-style" id="asset_contact" placeholder="Contact Details">
+                                        -->
+                                        <input type="url" class="form-style" id="asset_website" placeholder="Website">
+                                        <textarea class="form-style" id="asset_description" placeholder="Detailed description of resources avaliable" required ></textarea>
+                                        <input type="text" class="form-style" id="asset_contributor" placeholder="Your name" required >
+                                        <div class="asset-coordinates">
+                                            <input type="hidden" id="asset_longitude" data-geo="lng" />
+                                            <input type="hidden" id="asset_latitude" data-geo="lat" />
+                                        </div>
+                                    </div>
+                                </div><!-- .addContentWrap -->
+            
+                                <div class="checkBoxWrap">
+                                    <label>
+                                        <input type="checkbox" class="asset_supplier"> Supplier
+                                    </label>
+                                    </p>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                                    </div>
+                                </div><!-- .checkBoxWrap -->
+                            </form>
+                        </div><!-- .addContentWrap -->
+                    </div><!-- .addContentMenu -->
+                    
+                    <!-- END OF CONTENT SECTION -->
+
+                  </div><!-- #mobileWrap -->
+                <!-- </div> --><!-- #controlWrap -->
             </div>
-          </div><!-- #mobileWrap -->
-        </div><!-- #controlWrap -->
+
+            <div class="sidebar-pane" id="about">
+                <!-- ABOUT SECTION -->
+                <div class="header">
+                    <img class="img-responsive header-img" src="img/maker_network_icon.png">
+                    <span class="brand">The Maker Network</span>
+                </div><!-- .header -->
+                <div class="sidebar-close"><i class="fa fa-3x fa-caret-left"></i></div>
+
+                <div id="mobileWrap">
+
+
+                <div class="aboutMenu">
+                    <h2 class="aboutMenu">Join the Maker Movement</h2>
+                    <span>The Maker Network is an ongoing open source project which aims to create a global database of maker resources  - from workspaces to incubators - which is powered by the maker community and easily searchable on any device.</span> 
+                    <span>If you would like to help you can start by mapping a resource, joining the project discussion or checking out the map source on github.</span>
+                </div><!-- .aboutMenu -->
+                <div class="footerWrap">
+                    <div class="footer">
+                        <a class="socialite github-fork"    href="https://github.com/RHoKAustralia/melb-maker-map"
+                            data-user="RHoKAustralia"
+                            data-repo="melb-maker-map"
+                            data-type="fork"
+                            data-count="true">Fork on GitHub</a>
+                    </div>
+                </div>
+                </div><!-- #mobileWrap -->
+            </div>
+        </div>
+    </div>
+
 
         <button class="btn btn-default locateMe" rel="tooltip" data-placement="left" data-original-title="click to re-center the map"><i class="fa fa-2x fa-map-marker"></i></button>
         
@@ -216,7 +247,11 @@
         <script src="./js/socialite.min.js"></script>
         <script src="./js/socialite.github.js"></script>
         <script src="./js/parse-1.4.2.js"></script>
+        <script src="./js/jquery-sidebar.min.js"></script>
         <script src="./js/model.js"></script>
         <script src="./js/index.js"></script>
+        <script type="text/javascript">
+            var sidebar = $('#sidebar').sidebar();
+        </script>
     </body>
 </html>

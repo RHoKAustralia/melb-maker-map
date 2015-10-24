@@ -1,0 +1,13 @@
+a.menu-btn {
+  width: 30%;
+  padding: 6px 10px;
+}
+
+.sidebar-close {
+  width: 70px;
+  height: 70px;
+}
+
+.sidebar{
+  z-index: 2
+}
